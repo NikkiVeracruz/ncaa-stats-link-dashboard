@@ -1,5 +1,7 @@
 """Read-only NCAA contest link probe regression tests (no network)."""
 import json
+import subprocess
+import sys
 import tempfile
 import unittest
 from datetime import date
@@ -109,6 +111,23 @@ class NCAAProofOfConceptTests(unittest.TestCase):
             self.assertEqual(report["games"][0]["link_status"], "source_unavailable")
             self.assertNotIn("ncaa_stats_url", report["games"][0])
             self.assertTrue(report["source_errors"])
+
+    def test_latest_day_zero_match_is_visible_but_known_old_day_can_be_required(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            fixture_dir(root, groups={"FBS": [event("401234567")]})
+            command = [
+                sys.executable, str(Path(__file__).resolve().parents[1] / "ncaa_poc.py"),
+                "--date", "2026-11-23", "--fixture-dir", str(root),
+                "--output", str(root / "report.json"),
+            ]
+            recent = subprocess.run(command, capture_output=True, text=True)
+            self.assertEqual(recent.returncode, 0)
+            self.assertIn("WARNING: No ID matches", recent.stderr)
+            self.assertEqual(json.loads((root / "report.json").read_text())["unique_games"], 1)
+            old_known_available = subprocess.run(
+                command + ["--require-matches"], capture_output=True, text=True)
+            self.assertEqual(old_known_available.returncode, 3)
 
     def test_cross_sport_id_conflict_suppresses_url(self):
         with tempfile.TemporaryDirectory() as temp:
