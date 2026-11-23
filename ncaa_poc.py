@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import csv
 import gzip
+import hashlib
 import io
 import json
 import re
@@ -155,7 +156,8 @@ def process_day(day, *, offline=None, fetcher=fetch_bytes):
                    if offline else fetcher(url))
             mapping, metrics = read_mapping(raw, compressed=(family == "football" and not offline), sport=family)
             mappings[family] = mapping
-            sources[family] = {"source": url, "season": season, "status": "loaded", **metrics,
+            sources[family] = {"source": url, "season": season, "status": "loaded",
+                               "sha256": hashlib.sha256(raw).hexdigest(), **metrics,
                                "sample_mapping_espn_ids": list(mapping)[:4]}
         except (OSError, UnicodeError, ValueError, EOFError) as exc:
             mappings[family] = None
@@ -170,9 +172,11 @@ def process_day(day, *, offline=None, fetcher=fetch_bytes):
             if not isinstance(payload, dict) or not isinstance(payload.get("events"), list):
                 raise ValueError("ESPN response does not contain an events list")
             count = 0
+            rejected = 0
             for event in payload["events"]:
                 game = parse_event(event, group)
                 if game is None:
+                    rejected += 1
                     continue
                 count += 1
                 eid = game["espn_game_id"]
@@ -186,8 +190,10 @@ def process_day(day, *, offline=None, fetcher=fetch_bytes):
                     errors.append(f"Conflicting scoreboard identity for ESPN game {eid}")
                 if group not in existing["sports"]:
                     existing["sports"].append(group)
+            if rejected:
+                errors.append(f"{group} scoreboard: {rejected} malformed events")
             sources[group] = {
-                "source": url, "status": "loaded",
+                "source": url, "status": "loaded", "rejected": rejected,
                 "events": len(payload["events"]), "accepted": count,
                 "sample_scoreboard_espn_ids": [str(e.get("id")) for e in payload["events"][:4]],
             }
