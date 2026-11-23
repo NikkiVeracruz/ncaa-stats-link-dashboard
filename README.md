@@ -55,6 +55,44 @@ Eastern date and uploads its JSON result as a temporary diagnostic artifact.
 It has no schedule. The manual workflow may require navigating GitHub's
 Actions tab; GitHub connector support for launching arbitrary workflows varies.
 
+## Measured source behavior (November 23, 2026)
+
+One-off, read-only GitHub Actions trials counted ESPN scoreboard game identities
+and unique IDs from the currently published SportsDataverse crosswalk files:
+
+| Test date | Games discovered | NCAA IDs matched |
+|---|---:|---:|
+| 2026-11-12 | 81 | 81 |
+| 2026-11-14 | 244 | 237 |
+| 2026-11-21 | 225 | 0 |
+| 2026-11-22 | 101 | 0 |
+
+Source: [NCAA PR #1 validation run](https://github.com/NikkiVeracruz/ncaa-stats-link-dashboard/actions/runs/45285754055).
+These are single-day samples, **not historical imports**. They show that our
+exact-ID join works on earlier games but the crosswalk apparently lags current
+games. They do **not** establish a reliable numerical publication delay;
+further data over multiple days is needed. A green diagnostic workflow does
+not mean every current game has an NCAA link.
+
+The current pre-merge check **requires** at least one unique mapping on older
+known-available sample dates. Recent dates deliberately report missing mappings
+as a visible warning without inventing links. Every source HTTP, CSV or parse
+failure remains fatal.
+
+Example unverified candidate URLs for manual browser checking:
+- FBS (Arizona State at UCF, Nov 14):
+  https://stats.ncaa.org/contests/6582945/box_score
+- FCS (Maine at UAlbany, Nov 14):
+  https://stats.ncaa.org/contests/6604424/box_score
+- MBB (Colorado at Providence, Nov 14):
+  https://stats.ncaa.org/contests/6638390/box_score
+- WBB (Providence at Boston College, Nov 14):
+  https://stats.ncaa.org/contests/6656468/box_score
+
+**None of these destination pages has been browser-verified by this probe.**
+No live NCAA dashboard or production publishing is permitted until the
+accuracy, latency, coverage and site-access checks are resolved and approved.
+
 ## Link-status meanings
 
 - `id_matched_page_not_verified`: unique ESPN → NCAA ID mapping published;
