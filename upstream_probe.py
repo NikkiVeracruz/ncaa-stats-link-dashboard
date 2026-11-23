@@ -30,7 +30,7 @@ def normalize_date(value):
         return datetime.fromisoformat(s.replace("Z", "+00:00")).date().isoformat()
     except ValueError:
         pass
-    for fmt in ("%m/%d/%Y", "%m/%d/%y", "%Y%m%d"):
+    for fmt in ("%m/%d/%Y", "%m/%d/%y", "%Y%m%d", "%m/%d/%Y %I:%M %p", "%m/%d/%Y TBA"):
         try:
             return datetime.strptime(s, fmt).date().isoformat()
         except ValueError:
@@ -46,11 +46,30 @@ def key(day, a, b):
     return day, *sorted((a, b))
 
 
-def index_rows(rows, date_column):
-    index = defaultdict(set)
+def team_crosswalk(rows, season):
+    candidates = defaultdict(set)
     for row in rows:
-        k = key(row.get(date_column), row.get("espn_team_id"),
-                row.get("opponent_espn_team_id"))
+        if "season" in row and str(row["season"]) not in (str(season), f"{season-1}-{str(season)[-2:]}"):
+            continue
+        ncaa = clean_id(row.get("ncaa_team_id"))
+        espn = clean_id(row.get("espn_team_id"))
+        if ncaa and espn:
+            candidates[ncaa].add(espn)
+    return {k: next(iter(v)) for k, v in candidates.items() if len(v) == 1}
+
+
+def index_rows(rows, date_column, crosswalk=None):
+    index = defaultdict(set)
+    crosswalk = crosswalk or {}
+    def resolve(row, direct_field, ncaa_field):
+        direct = clean_id(row.get(direct_field))
+        mapped = crosswalk.get(clean_id(row.get(ncaa_field)))
+        if direct and mapped and direct != mapped:
+            return None
+        return direct or mapped
+    for row in rows:
+        k = key(row.get(date_column), resolve(row, "espn_team_id", "team_id"),
+                resolve(row, "opponent_espn_team_id", "opponent_id"))
         contest = clean_id(row.get("contest_id"))
         if k and contest:
             index[k].add(contest)
@@ -111,6 +130,7 @@ def run(start, end):
     import pyarrow.parquet as pq
     result = {"read_only": True, "destination_pages_verified": False, "sources": {}, "days": []}
     indexes = {}
+    result["additional_schedule_sources"] = {}
     # Test one positive-control date and the problem dates, plus future schedules.
     days = sorted(set([date(2026, 11, 14)] + [
         start + timedelta(days=i) for i in range((end-start).days + 1)]))
@@ -124,6 +144,44 @@ def run(start, end):
             try:
                 table = pq.read_table(io.BytesIO(fetch_bytes(url)))
                 columns = table.column_names
+                xwalk = {}
+                if family != "football":
+                    team_url = RAW + f"/ncaa-{family}-hoops-raw/main/{family}/teams/parquet/{season}.parquet"
+                    try:
+                        tt = pq.read_table(io.BytesIO(fetch_bytes(team_url)))
+                        if not {"ncaa_team_id","espn_team_id"}.issubset(tt.column_names):
+                            raise ValueError("missing crosswalk columns")
+                        xwalk = team_crosswalk(tt.to_pylist(), season)
+                        result.setdefault("team_crosswalks", {})[family] = {"url":team_url,"rows":tt.num_rows,"unique_ids":len(xwalk),"columns":tt.column_names}
+                        print("TEAM_CROSSWALK", family, result["team_crosswalks"][family], flush=True)
+                    except Exception as exc:
+                        result.setdefault("team_crosswalks", {})[family] = {"url":team_url,"error":str(exc)}
+                        print("TEAM_CROSSWALK_ERROR", family, str(exc), flush=True)
+                    alternatives = [
+                        RAW + f"/ncaa-{family}-hoops-raw/main/{family}/schedule_master.parquet",
+                        f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_{family}_schedule/ncaa_{family}_schedule_{season}.parquet",
+                    ]
+                    summaries = []
+                    for alt in alternatives:
+                        try:
+                            t = pq.read_table(io.BytesIO(fetch_bytes(alt)))
+                            dc = next((c for c in ("game_date","date","contest_date") if c in t.column_names), None)
+                            if not dc or "contest_id" not in t.column_names:
+                                raise ValueError(f"unsupported schedule columns: {t.column_names}")
+                            ids = defaultdict(set)
+                            for row in t.select([dc,"contest_id"]).to_pylist():
+                                d = normalize_date(row.get(dc))
+                                cid = clean_id(row.get("contest_id"))
+                                if d and cid:
+                                    ids[d].add(cid)
+                            detail = {"url":alt,"rows":t.num_rows,"columns":t.column_names,
+                                      "latest_contest_date":max(ids,default=None),
+                                      "sample_dates":{d.isoformat():len(ids[d.isoformat()]) for d in days}}
+                        except Exception as exc:
+                            detail = {"url":alt,"error":f"{type(exc).__name__}: {exc}"}
+                        summaries.append(detail)
+                        print("ALTERNATIVE_SCHEDULE", family, json.dumps(detail), flush=True)
+                    result["additional_schedule_sources"][family] = summaries
                 date_column = next((c for c in ("date", "game_date", "contest_date") if c in columns), None)
                 required = {"contest_id", "espn_game_id"} if family == "football" else {
                     "contest_id", "espn_team_id", "opponent_espn_team_id"}
@@ -132,8 +190,8 @@ def run(start, end):
                 if not date_column or not required.issubset(columns):
                     obs["status"] = "unsupported_schema"
                 else:
-                    rows = table.select([date_column, *sorted(required)]).to_pylist()
-                    idx = index_football(rows, date_column) if family == "football" else index_rows(rows, date_column)
+                    rows = table.select([date_column, *sorted(required | ({"team_id", "opponent_id"} & set(columns)))]).to_pylist()
+                    idx = index_football(rows, date_column) if family == "football" else index_rows(rows, date_column, xwalk)
                     info = inspect_rows(rows, date_column, family)
                     obs.update(info, status="loaded" if idx else "no_usable_keys",
                                keyed_games=len(idx), latest_keyed_date=max((k[0] for k in idx), default=None),
