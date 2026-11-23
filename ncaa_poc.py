@@ -155,7 +155,8 @@ def process_day(day, *, offline=None, fetcher=fetch_bytes):
                    if offline else fetcher(url))
             mapping, metrics = read_mapping(raw, compressed=(family == "football" and not offline), sport=family)
             mappings[family] = mapping
-            sources[family] = {"source": url, "season": season, "status": "loaded", **metrics}
+            sources[family] = {"source": url, "season": season, "status": "loaded", **metrics,
+                               "sample_mapping_espn_ids": list(mapping)[:4]}
         except (OSError, UnicodeError, ValueError, EOFError) as exc:
             mappings[family] = None
             sources[family] = {"source": url, "season": season, "status": "error"}
@@ -188,6 +189,7 @@ def process_day(day, *, offline=None, fetcher=fetch_bytes):
             sources[group] = {
                 "source": url, "status": "loaded",
                 "events": len(payload["events"]), "accepted": count,
+                "sample_scoreboard_espn_ids": [str(e.get("id")) for e in payload["events"][:4]],
             }
         except (OSError, UnicodeError, ValueError) as exc:
             sources[group] = {"source": url, "status": "error"}
@@ -253,9 +255,20 @@ def main():
         total = sum(results.values())
         matched = results.get("id_matched_page_not_verified", 0)
         print(f"  {group}: {matched}/{total} IDs matched (not browser verified)")
+    for family in ("football", "mbb", "wbb"):
+        source = report["data_sources"][family]
+        print(f"  MAP {family}: {source.get('unique_espn_games_in_mapping', 0)} "
+              f"ESPN IDs in {source.get('mapping_rows', 0)} rows; "
+              f"sample={source.get('sample_mapping_espn_ids', [])}")
+    for group in SPORTS:
+        print(f"  FEED {group}: sample ESPN IDs "
+              f"{report['data_sources'][group].get('sample_scoreboard_espn_ids', [])}")
     if report["source_errors"]:
         print("INCOMPLETE PROBE: " + " | ".join(report["source_errors"]), file=sys.stderr)
         raise SystemExit(2)
+    if report["unique_games"] and not report["link_status_counts"].get("id_matched_page_not_verified"):
+        print("NO CROSSWALK MATCHES: zero links despite games; feasibility unproven", file=sys.stderr)
+        raise SystemExit(3)
 
 
 if __name__ == "__main__":
