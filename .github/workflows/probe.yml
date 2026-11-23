@@ -1,0 +1,33 @@
+name: Manual NCAA contest-ID matching probe
+on:
+  workflow_dispatch:
+    inputs:
+      eastern_date:
+        description: One US Eastern game date (YYYY-MM-DD); this does not archive games
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Offline tests
+        run: python -m unittest discover -s tests -v
+      - name: One-day read-only NCAA link trial
+        env:
+          EASTERN_DATE: ${{ inputs.eastern_date }}
+        run: python ncaa_poc.py --date "$EASTERN_DATE" --output report.json
+      - name: Save report even on incomplete source retrieval
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ncaa-link-probe
+          path: report.json
+          if-no-files-found: warn
+          retention-days: 14
