@@ -124,3 +124,9 @@ prototype. That requires its own evidence and explicit approval.
 
 Governance decision: `NCAA-POC-001` in
 [the central Mega Board register](https://github.com/NikkiVeracruz/nfl-gamebook-dashboard/blob/main/PROJECT_REGISTER.md).
+
+## Reliability investigation (approved November 23, 2026)
+
+Run `python reliability_probe.py --end 2026-11-23 --days 12 --output diagnostics/reliability.json` for a bounded read-only snapshot. Repeat the same window on subsequent days and compare per-sport missing IDs, game status and SHA-256 fingerprints of the actual mapping bytes. A changed fingerprint does not prove newer game coverage. A single snapshot cannot establish first-publication times. Malformed scoreboard events now cause an incomplete-source failure; no coverage claim is made from successful HTTP alone.
+
+Next research: examine permitted alternate NCAA contest-ID sources, independently compare schedule completeness and manually confirm destination matchups. No production deployment, scheduled monitoring or historical archive is enabled. Do not interpret a successful diagnostic as approval to launch.
