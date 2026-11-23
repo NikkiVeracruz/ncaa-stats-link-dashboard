@@ -30,6 +30,10 @@ jobs:
         run: python ncaa_poc.py --date 2026-11-22 --output diagnostics/basketball-sunday.json
       - name: Bounded recent-date reliability baseline
         run: python reliability_probe.py --end 2026-11-23 --days 12 --output diagnostics/reliability.json
+      - name: Install pinned Parquet reader for upstream experiment
+        run: python -m pip install pyarrow==19.0.1
+      - name: Compare earlier-stage schedule data
+        run: python upstream_probe.py --start 2026-11-18 --end 2026-11-23 --output diagnostics/upstream.json
       - name: Save diagnostic evidence even if data sources fail
         if: always()
         uses: actions/upload-artifact@v4
