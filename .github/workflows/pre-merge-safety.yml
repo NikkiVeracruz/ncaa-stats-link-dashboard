@@ -18,10 +18,12 @@ jobs:
       - name: Offline behavior and safety regression tests
         run: python -m unittest discover -s tests -v
       # Retrospective single-day source checks only; no games are archived.
+      # Older dates must have real IDs. Most recent IDs can legitimately lag,
+      # but any failed source/parse check remains a fatal error.
       - name: Read-only comparison (football Saturday, November 14)
-        run: python ncaa_poc.py --date 2026-11-14 --output diagnostics/football-earlier.json
+        run: python ncaa_poc.py --date 2026-11-14 --require-matches --output diagnostics/football-earlier.json
       - name: Read-only comparison (basketball Thursday, November 12)
-        run: python ncaa_poc.py --date 2026-11-12 --output diagnostics/basketball-earlier.json
+        run: python ncaa_poc.py --date 2026-11-12 --require-matches --output diagnostics/basketball-earlier.json
       - name: Read-only real-data trial (football Saturday, November 21)
         run: python ncaa_poc.py --date 2026-11-21 --output diagnostics/football-saturday.json
       - name: Read-only real-data trial (basketball Sunday, November 22)
