@@ -244,6 +244,8 @@ def main():
                         help="Single game date in US Eastern, YYYY-MM-DD")
     parser.add_argument("--fixture-dir", type=Path)
     parser.add_argument("--output", type=Path, default=Path("report.json"))
+    parser.add_argument("--require-matches", action="store_true",
+                        help="Fail if no contest IDs matched (use for older known-available test dates)")
     args = parser.parse_args()
     day = date.fromisoformat(args.date)
     report = process_day(day, offline=args.fixture_dir)
@@ -266,9 +268,20 @@ def main():
     if report["source_errors"]:
         print("INCOMPLETE PROBE: " + " | ".join(report["source_errors"]), file=sys.stderr)
         raise SystemExit(2)
+    # The upstream crosswalk can lag completed scoreboards; distinguish a
+    # diagnostic warning from an assertion about known-available older dates.
+    for group in SPORTS:
+        examples = [game for game in report["games"] if group in game["sports"]
+                    and game["link_status"] == "id_matched_page_not_verified"]
+        if examples:
+            game = examples[0]
+            print(f"  CANDIDATE {group}: {game['away_team']} @ {game['home_team']} "
+                  f"({game['date_et']}): {game['ncaa_stats_url']}")
     if report["unique_games"] and not report["link_status_counts"].get("id_matched_page_not_verified"):
-        print("NO CROSSWALK MATCHES: zero links despite games; feasibility unproven", file=sys.stderr)
-        raise SystemExit(3)
+        print("WARNING: No ID matches for this date; likely mapping publication lag. "
+              "Do not treat as verified NCAA box-score coverage.", file=sys.stderr)
+        if args.require_matches:
+            raise SystemExit(3)
 
 
 if __name__ == "__main__":
