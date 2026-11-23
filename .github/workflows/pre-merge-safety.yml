@@ -1,0 +1,44 @@
+name: Pre-merge NCAA proof-of-concept safety
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile read-only prototype
+        run: python -m py_compile ncaa_poc.py tests/test_poc.py
+      - name: Offline behavior and safety regression tests
+        run: python -m unittest discover -s tests -v
+      # Retrospective single-day source checks only; no games are archived.
+      # Older dates must have real IDs. Most recent IDs can legitimately lag,
+      # but any failed source/parse check remains a fatal error.
+      - name: Read-only comparison (football Saturday, November 14)
+        run: python ncaa_poc.py --date 2026-11-14 --require-matches --output diagnostics/football-earlier.json
+      - name: Read-only comparison (basketball Thursday, November 12)
+        run: python ncaa_poc.py --date 2026-11-12 --require-matches --output diagnostics/basketball-earlier.json
+      - name: Read-only real-data trial (football Saturday, November 21)
+        run: python ncaa_poc.py --date 2026-11-21 --output diagnostics/football-saturday.json
+      - name: Read-only real-data trial (basketball Sunday, November 22)
+        run: python ncaa_poc.py --date 2026-11-22 --output diagnostics/basketball-sunday.json
+      - name: Save diagnostic evidence even if data sources fail
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ncaa-contest-id-readonly-diagnostics
+          path: diagnostics/*.json
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Safety invariant
+        run: |
+          test ! -d archive
+          test ! -d docs
+          test ! -e index.html
+          echo 'No production dashboard, score scraping, archive or automatic schedule configured'
