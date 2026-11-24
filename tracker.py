@@ -194,6 +194,8 @@ def main():
     known={g["key"] for g in prior.get("current",[])+prior.get("archive",[])}
     games={k:g for k,g in games.items() if k in known or any(date.fromisoformat(g["date_et"]) in window_days(s,today) for s in g["sports"])}
     data=make_feed(games,prior,cutoff,today,now,read_overrides(a.observations))
+    if "university_discovery" in prior:
+        data["university_discovery"]=prior["university_discovery"]
     write_feed(a.output,data)
     print("TRACKER",json.dumps({"today":today.isoformat(),"current":len(data["current"]),"archive":len(data["archive"]),"schedule_shortcuts":sum(any(s and s["schedule_shortcut"] for s in g["schools"].values()) for g in data["current"]),"reviewed_reports":sum(bool(g["reports"]) for g in data["current"]),"source":"ESPN and reviewed link observations","display_day":today.isoformat(),"optional_discovery_source":data["optional_discovery_source"],"game_centers":sum(any(r.get("kind")=="game_center" for r in g["reports"]) for g in data["current"])}))
 if __name__=="__main__":main()
