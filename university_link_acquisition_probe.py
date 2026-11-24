@@ -100,7 +100,7 @@ def candidates(html, *, opponent="Arizona", day="Nov 23", result="Win 93-62"):
         if n.tag not in ("article", "div", "li", "tr", "section"):
             continue
         text = normalized(n.text())
-        if not re.search(r"\b" + re.escape(opponent.lower()) + r"\b", text):
+        if not any(normalized(x.text()) in (opponent.lower(), "vs." + opponent.lower(), "vs. " + opponent.lower(), "at" + opponent.lower(), "at " + opponent.lower()) for x in n.walk()):
             continue
         if not re.search(r"\b" + re.escape(day.lower()) + r"\b", text):
             continue
