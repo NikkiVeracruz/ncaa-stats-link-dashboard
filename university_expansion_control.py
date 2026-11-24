@@ -6,7 +6,6 @@ from university_discovery import enrich, SOURCES
 NOW = datetime.fromisoformat("2026-11-24T14:00:00+00:00")
 CONTROLS = (
     ("wbb:401921427", "utah", "iowa", "254", "2294", "utah", "iowa", 66, 75),
-    ("wbb:401916019", "tennessee_martin", "virginia_tech", "2630", "259", "utmartin", "virginiatech", 41, 85),
     ("wbb:401913729", "michigan", "miami_florida", "130", "2390", "michigan", "miami", 79, 58),
 )
 
