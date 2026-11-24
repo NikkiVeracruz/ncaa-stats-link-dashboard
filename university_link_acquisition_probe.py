@@ -26,17 +26,17 @@ class NoRedirect(HTTPRedirectHandler):
         return None
 
 
-def allowed(url):
+def allowed(url, host=HOST):
     try:
         u = urlsplit(url)
-        return (u.scheme == "https" and u.hostname == HOST and
+        return (u.scheme == "https" and u.hostname == host and
                 not u.username and not u.password and u.port in (None, 443))
     except ValueError:
         return False
 
 
-def get(url, content_type):
-    if not allowed(url):
+def get(url, content_type, *, host=HOST):
+    if not allowed(url, host):
         raise ValueError("Unexpected source host")
     with build_opener(NoRedirect()).open(
         Request(url, headers={"User-Agent": AGENT, "Accept": content_type}), timeout=15
@@ -88,13 +88,13 @@ def normalized(text):
     return " ".join(text.lower().split())
 
 
-def candidates(html, *, opponent="Arizona", day="Nov 23", result="Win 93-62", season="2026-27", aliases=None, include_labels=False):
+def candidates(html, *, opponent="Arizona", day="Nov 23", result="Win 93-62", season="2026-27", aliases=None, include_labels=False, source=SOURCE, cdn_prefix=None, heading_order="season_first", short_result=False, pdf_labels=("box score (pdf)",)):
     from university_probe import norm
     wanted = set(aliases or (norm(opponent),))
     tree = Tree()
     tree.feed(html)
     if not any(n.tag in ("h1", "h2") and
-               (season + " women's basketball schedule").lower() in normalized(n.text())
+               ((season + " women's basketball schedule").lower() if heading_order == "season_first" else ("women's basketball " + season + " schedule").lower()) in normalized(n.text())
                for n in tree.root.walk()):
         return {}
     # A link must be contained in a single row matching opponent, date and
@@ -115,25 +115,30 @@ def candidates(html, *, opponent="Arizona", day="Nov 23", result="Win 93-62", se
             continue
         if not re.search(r"\b" + re.escape(day.lower()) + r"\b", text):
             continue
-        if not re.search(r"\b" + re.escape(result.lower()) + r"\b", text):
+        result_text = result.lower()
+        if short_result:
+            result_text = ("w " if result_text.startswith("win ") else "l ") + result_text.split(" ", 1)[1]
+        if not re.search(r"\b" + re.escape(result_text) + r"\b", text):
             continue
         # Reject wrappers containing multiple schedule dates or results.
         if len(re.findall(r"\b(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\s+\d{1,2}\b", text)) != 1:
             continue
-        if len(re.findall(r"\b(?:win|loss)\s+\d+\s*-\s*\d+\b", text)) != 1:
+        if len(re.findall(r"\b(?:w|l)\s+\d+\s*-\s*\d+\b" if short_result else r"\b(?:win|loss)\s+\d+\s*-\s*\d+\b", text)) != 1:
             continue
         links = {}
         for a in n.walk():
             if a.tag != "a":
                 continue
             label = normalized(a.text()).replace(" opens in a new window", "").strip()
-            url = urljoin(SOURCE, a.attrs.get("href", ""))
-            if not allowed(url):
+            url = urljoin(source, a.attrs.get("href", ""))
+            same_host = allowed(url, urlsplit(source).hostname)
+            direct_pdf = bool(cdn_prefix and cdn_allowed(url, cdn_prefix))
+            if not same_host and not direct_pdf:
                 continue
             path = urlsplit(url).path
-            if label == "box score" and re.fullmatch(r"/boxscore/\d+", path):
+            if same_host and label == "box score" and re.fullmatch(r"/boxscore/\d+", path):
                 links.setdefault("box_score", set()).add(url)
-            if label == "box score (pdf)" and path.lower().endswith(".pdf"):
+            if label in pdf_labels and path.lower().endswith(".pdf") and (direct_pdf or (same_host and path.startswith("/documents/"))):
                 links.setdefault("pdf_candidate", set()).add(url)
         if links:
             matches.append(links)
@@ -155,26 +160,26 @@ CDN = "https://storage.googleapis.com"
 CDN_PREFIX = "/vucommodores-prod/"
 
 
-def cdn_allowed(url):
+def cdn_allowed(url, prefix=CDN_PREFIX):
     try:
         u = urlsplit(url)
         return (u.scheme == "https" and u.hostname == "storage.googleapis.com" and
                 not u.username and not u.password and u.port in (None, 443) and
-                u.path.startswith(CDN_PREFIX) and u.path.lower().endswith(".pdf") and
+                u.path.startswith(prefix) and u.path.lower().endswith(".pdf") and
                 "%" not in u.path and ".." not in u.path.split("/") and not u.query and not u.fragment)
     except ValueError:
         return False
 
 
-def download_link(html, parent):
+def download_link(html, parent, prefix=CDN_PREFIX):
     tree = Tree(); tree.feed(html)
     links = {urljoin(parent, a.attrs.get("href", "")) for a in tree.root.walk()
              if a.tag == "a" and normalized(a.text()) in ("download", "download pdf")}
-    links = {u for u in links if cdn_allowed(u)}
+    links = {u for u in links if cdn_allowed(u, prefix)}
     return next(iter(links)) if len(links) == 1 else None
 
 
-def pdf_identity(text, *, opponent, day, own_score, opponent_score, season):
+def pdf_identity(text, *, opponent, day, own_score, opponent_score, season, own_name="Vanderbilt"):
     # Require exact labeled teams/scores, date, final report marker and sport.
     text = normalized(text)
     required = ("official basketball box score - final", season.lower() + " women's basketball")
@@ -184,11 +189,11 @@ def pdf_identity(text, *, opponent, day, own_score, opponent_score, season):
         return False
     def score(name, value):
         return bool(re.search(r"\b" + re.escape(name.lower()) + r"\s*-\s*" + str(value) + r"\s+record\s*:", text))
-    return score("Vanderbilt", own_score) and score(opponent, opponent_score)
+    return score(own_name, own_score) and score(opponent, opponent_score)
 
 
-def get_pdf(url):
-    if not cdn_allowed(url):
+def get_pdf(url, prefix=CDN_PREFIX):
+    if not cdn_allowed(url, prefix):
         raise ValueError("Unexpected PDF destination")
     # Check the CDN's robots rules as well; RFC 9309 permits access when the
     # robots resource itself is absent (404/410), but not on denial/5xx.

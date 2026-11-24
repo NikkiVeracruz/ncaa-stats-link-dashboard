@@ -63,7 +63,7 @@ class UniversityDiscoveryTests(unittest.TestCase):
         def deny(g, side):
             raise HTTPError("https://vucommodores.com", 403, "Forbidden", {}, None)
         self.assertIsNone(enrich(feed, NOW, deny))
-        self.assertTrue(feed["university_discovery"]["blocked"])
+        self.assertIn("vanderbilt", feed["university_discovery"]["blocked_sources"])
         self.assertFalse(eligible(feed, NOW + timedelta(hours=1)))
         self.assertFalse(feed["archive"][0]["reports"])
 
