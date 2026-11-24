@@ -1,8 +1,8 @@
-"""Standalone NCAA tracking; ESPN game data only. No school-site retrieval.
-A single atomic feed contains current games and forward-only completed records.
-The caller supplies an explicit archive start date; no backfill or deployment.
+"""Standalone NCAA tracker. ESPN data and independently reviewed optional links.
+Atomic current/forward-only archive feed; no school-site scraping or historical backfill.
 """
-import argparse,csv,json,os,shutil,tempfile
+import argparse,csv,json,os,tempfile
+from link_enrichment import apply_links
 from datetime import date,datetime,timedelta,timezone
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -57,6 +57,8 @@ def from_event(event,group,idx,rows,overrides):
     g["team_ids"]={s:str(sides[s]["id"]) for s in ("home","away")}
     keys={s:resolve(sides[s],idx) for s in ("home","away")}
     g["schools"]={s:school_link(keys[s],rows,group) for s in keys}
+    g["school_keys"]=keys
+    g["team_names"]={s:sorted({norm(sides[s].get(f)) for f in ("displayName","shortDisplayName","location")}) for s in sides}
     g["scoreboards"]={group:SCOREBOARDS[group]}
     names={s:{norm(sides[s].get(f)) for f in ("displayName","shortDisplayName","location")} for s in sides}
     g["reports"]=[]
@@ -79,10 +81,11 @@ def merge_game(g,h):
     best["scoreboards"]={**g["scoreboards"],**h["scoreboards"]}
     return best
 
-def collect(days,idx,rows,overrides,fetcher=fetch_bytes):
+def collect(days,idx,rows,overrides,fetcher=fetch_bytes,groups=None):
     games={}
     for day in days:
         for group,(sport,groupid,_) in SPORTS.items():
+            if groups is not None and group not in groups.get(day,set()):continue
             payload=json.loads(fetcher(scoreboard_url(sport,groupid,day)))
             events=payload.get("events")
             if not isinstance(events,list) or len(events)>=500:raise ValueError("Incomplete scoreboard "+group)
@@ -93,23 +96,67 @@ def collect(days,idx,rows,overrides,fetcher=fetch_bytes):
                 games[key]=merge_game(games[key],g) if key in games else g
     return games
 
-def make_feed(games,prior,cutoff,today,now):
+def display_day(now):
+    return (now.astimezone(EASTERN)-timedelta(hours=3)).date()
+
+def football_start(day):
+    return day-timedelta(days=(day.weekday()-3)%7)
+
+def window_days(group,day):
+    if group in ("FBS","FCS"):
+        start=football_start(day)
+        return {start+timedelta(days=i) for i in range(7)}
+    return {day-timedelta(days=1),day,day+timedelta(days=1)}
+
+def requested_days(now,prior):
+    day=display_day(now)
+    groups={}
+    for group in SPORTS:
+        for d in window_days(group,day):
+            groups.setdefault(d,set()).add(group)
+    # Reconcile only previously tracked unresolved games outside normal windows.
+    pending=set()
+    for g in prior.get("current",[]):
+        if not g["completed"] and g["status"] not in TERMINAL:
+            d=date.fromisoformat(g["date_et"])
+            if d<day and any(d not in window_days(s,day) for s in g["sports"]):
+                pending.add(d)
+                groups.setdefault(d,set()).update(g["sports"])
+    return groups
+
+def make_feed(games,prior,cutoff,today,now,observations=None):
     cutoff=cutoff.isoformat()
     if prior and prior.get("archive_start")!=cutoff:raise ValueError("Archive start cannot change silently")
     archive={g["key"]:g for g in prior.get("archive",[]) if g["completed"] and g["date_et"]>=cutoff}
-    # Preserve past current games that remain unresolved; never infer final from age.
-    active={g["key"]:g for g in prior.get("current",[]) if g["date_et"]>=cutoff and not g["completed"] and g["status"] not in TERMINAL}
+    previous={g["key"]:g for g in prior.get("current",[])}
+    previous.update(archive)
+    active={k:g for k,g in previous.items() if not g["completed"] and g["status"] not in TERMINAL}
     for key,g in games.items():
+        old=previous.get(key)
+        if old and old["team_ids"]!=g["team_ids"]:raise ValueError("Game identity conflict "+key)
         if key in archive:
-            old=archive[key]
-            if old["team_ids"]!=g["team_ids"] or old["date_et"]!=g["date_et"]:raise ValueError("Archive identity conflict "+key)
-            if not g["completed"]:g=old
+            if old["date_et"]!=g["date_et"]:raise ValueError("Archived game date conflict "+key)
+            if not g["completed"]:g=dict(old)
+        if g["completed"]:
+            g["final_seen_at"]=old.get("final_seen_at",now.isoformat()) if old else now.isoformat()
+        if old and old["date_et"]==g["date_et"]:
+            if old.get("discovery"):g["discovery"]=old["discovery"]
+            g["reports"]=list({(r.get("kind","box_score"),r["url"]):r for r in old.get("reports",[])+g.get("reports",[])}.values())
         active[key]=g
         if g["completed"] and g["date_et"]>=cutoff:archive[key]=g
-    yesterday=(today-timedelta(days=1)).isoformat()
-    current=[g for g in active.values() if g["date_et"]>=yesterday or (not g["completed"] and g["status"] not in TERMINAL)]
+    # Archived games remain eligible for optional enrichment even after display rollover.
+    pool={**active,**archive}
+    for g in pool.values():
+        # Only new/forward records are enriched; earlier games may appear as navigation only.
+        if g["date_et"]>=cutoff:
+            apply_links(g,observations or [],now)
+    current=[]
+    for g in pool.values():
+        d=date.fromisoformat(g["date_et"])
+        if any(d in window_days(s,today) for s in g["sports"]) or (not g["completed"] and g["status"] not in TERMINAL and d<today):
+            current.append(g)
     order=lambda g:(g["date_et"],g["start_utc"],g["key"])
-    return {"archive_start":cutoff,"updated_at":now.isoformat(),"current":sorted(current,key=order),"archive":sorted(archive.values(),key=order,reverse=True),"scoreboards":SCOREBOARDS}
+    return {"archive_start":cutoff,"updated_at":now.isoformat(),"current":sorted(current,key=order),"archive":sorted(archive.values(),key=order,reverse=True),"scoreboards":SCOREBOARDS,"display_day":today.isoformat(),"optional_discovery_source":"reviewed_links_only"}
 
 def write_feed(path,data):
     path.parent.mkdir(parents=True,exist_ok=True)
@@ -120,18 +167,22 @@ def write_feed(path,data):
 
 def main():
     p=argparse.ArgumentParser()
-    p.add_argument("--archive-start",required=True,type=date.fromisoformat)
+    p.add_argument("--archive-start",type=date.fromisoformat)
+    p.add_argument("--observations",type=Path,default=ROOT.parent/"reviewed_game_links.json")
     p.add_argument("--output",required=True,type=Path)
     a=p.parse_args()
-    now=datetime.now(timezone.utc);today=now.astimezone(EASTERN).date()
-    if a.archive_start>today:raise ValueError("Archive start is in the future")
+    now=datetime.now(timezone.utc);today=display_day(now)
     prior=json.loads(a.output.read_text()) if a.output.exists() else {}
-    if not prior and a.archive_start!=today:raise ValueError("New archive starts today; no historical backfill")
+    cutoff=a.archive_start or (date.fromisoformat(prior["archive_start"]) if prior else now.astimezone(EASTERN).date())
+    if cutoff>now.astimezone(EASTERN).date():raise ValueError("Archive start is in the future")
+    if not prior and cutoff!=now.astimezone(EASTERN).date():raise ValueError("New archive starts today; no historical backfill")
     idx,rows=directory()
-    # Yesterday is current display only; archive cutoff still applies.
-    days=[today-timedelta(days=1),today]
-    games=collect(days,idx,rows,read_overrides(ROOT.parent/"reviewed_reports.json"))
-    data=make_feed(games,prior,a.archive_start,today,now)
+    groups=requested_days(now,prior)
+    games=collect(sorted(groups),idx,rows,read_overrides(ROOT.parent/"reviewed_reports.json"),groups=groups)
+    # Older dates outside display windows are only for resolving tracked games, not backfills.
+    known={g["key"] for g in prior.get("current",[])+prior.get("archive",[])}
+    games={k:g for k,g in games.items() if k in known or any(date.fromisoformat(g["date_et"]) in window_days(s,today) for s in g["sports"])}
+    data=make_feed(games,prior,cutoff,today,now,read_overrides(a.observations))
     write_feed(a.output,data)
     print("TRACKER",json.dumps({"today":today.isoformat(),"current":len(data["current"]),"archive":len(data["archive"]),"schedule_shortcuts":sum(any(s and s["schedule_shortcut"] for s in g["schools"].values()) for g in data["current"]),"reviewed_reports":sum(bool(g["reports"]) for g in data["current"]),"source":"ESPN only"}))
 if __name__=="__main__":main()
