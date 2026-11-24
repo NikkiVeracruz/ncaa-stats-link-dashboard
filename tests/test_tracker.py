@@ -2,7 +2,7 @@ import json, tempfile, unittest
 from datetime import date,datetime,timezone,timedelta
 from pathlib import Path
 from link_enrichment import slot,apply_links
-from tracker import directory,from_event,merge_game,make_feed,school_link,write_feed,collect,display_day,window_days,requested_days,day_ranges
+from tracker import directory,from_event,merge_game,make_feed,school_link,write_feed,collect,display_day,window_days,requested_days
 D=date(2026,11,23)
 def event(state="post",status="STATUS_FINAL",completed=True,score=31):
     return {"id":"123","date":"2026-11-23T18:00:00Z","status":{"type":{"state":state,"name":status,"completed":completed},"displayClock":"5:13","period":2},"competitions":[{"neutralSite":False,"competitors":[{"homeAway":"home","team":{"id":"1","displayName":"Nebraska Cornhuskers","location":"Nebraska"},"score":str(score)},{"homeAway":"away","team":{"id":"2","displayName":"Ohio State Buckeyes","location":"Ohio State"},"score":"28"}]}]}
@@ -83,11 +83,11 @@ class TrackerTests(unittest.TestCase):
         r={"kind":"game_center","sport":"FBS","date":D.isoformat(),"school":"nebraska","teams":[["Nebraska",None],["Ohio State",None]],"url":"https://huskers.com/game-center/123","reviewed":True}
         out=make_feed({a["key"]:a,b["key"]:b},{},D,D,now,[r])
         self.assertFalse(any(g["reports"] for g in out["current"]))
-    def test_ranges(self):
-        self.assertEqual(day_ranges([D,D+timedelta(days=1),D+timedelta(days=3)]),[[D,D+timedelta(days=1)],[D+timedelta(days=3)]])
+    def test_single_date_requests(self):
         groups=requested_days(datetime(2026,11,23,21,tzinfo=timezone.utc),{})
         calls=[]
         def fetch(url):
             calls.append(url);return b'{"events":[]}'
         collect(sorted(groups),self.idx,self.rows,[],fetch,groups)
-        self.assertEqual(len(calls),4)
+        self.assertEqual(len(calls),20)
+        self.assertTrue(all(len(u.split('dates=')[1].split('&')[0])==8 for u in calls))
