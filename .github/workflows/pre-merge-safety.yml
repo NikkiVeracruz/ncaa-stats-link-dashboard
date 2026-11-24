@@ -43,6 +43,9 @@ jobs:
           mkdir -p preview
           python tracker.py --archive-start "$(TZ=America/New_York date +%F)" --output preview/feed.json
           cp site/index.html site/app.js site/style.css preview/
+      - name: One bounded official schedule acquisition trial
+        if: github.head_ref == 'research/bounded-vanderbilt-report-discovery'
+        run: python university_link_acquisition_probe.py
       - name: Save standalone preview
         uses: actions/upload-artifact@v4
         with:
