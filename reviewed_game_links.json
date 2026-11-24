@@ -1,0 +1,40 @@
+[
+  {
+    "kind": "game_center",
+    "sport": "FBS",
+    "date": "2026-11-28",
+    "school": "ohio_state",
+    "teams": [
+      [
+        "Michigan",
+        null
+      ],
+      [
+        "Ohio State",
+        null
+      ]
+    ],
+    "url": "https://ohiostatebuckeyes.com/game-center/22225",
+    "reviewed": true,
+    "source": "Official Ohio State published Game Center inspected in prior conversation, Nov 23 2026"
+  },
+  {
+    "kind": "game_center",
+    "sport": "MBB",
+    "date": "2026-11-24",
+    "school": "ohio_state",
+    "teams": [
+      [
+        "Vanderbilt",
+        null
+      ],
+      [
+        "Ohio State",
+        null
+      ]
+    ],
+    "url": "https://ohiostatebuckeyes.com/game-center/22675",
+    "reviewed": true,
+    "source": "Official Ohio State Game Center inspected Nov 23 2026"
+  }
+]

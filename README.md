@@ -1,6 +1,6 @@
-# NCAA game tracker — standalone staging implementation
+# NCAA game tracker — standalone implementation
 
-The current approved direction is a practical game tracking and official school schedule navigation aid. See [TRACKER.md](TRACKER.md) for the staged implementation and limitations. The historical research below is retained as evidence, not a current runtime requirement. No production deployment yet.
+The current approved direction is a practical game tracking and official school schedule navigation aid. See [TRACKER.md](TRACKER.md) for the staged implementation and limitations. The historical research below is retained as evidence, not a current runtime requirement. Production workflow prepared; see TRACKER.md for activation and current source limitations.
 
 # NCAA Stats link dashboard — proof of concept
 
