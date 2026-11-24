@@ -2,10 +2,10 @@
 Atomic current/forward-only archive feed; no school-site scraping or historical backfill.
 """
 import argparse,csv,json,os,tempfile
-from link_enrichment import apply_links
+from link_enrichment import apply_links, match
 from datetime import date,datetime,timedelta,timezone
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit,urlencode
 from ncaa_poc import SPORTS,EASTERN,fetch_bytes,parse_event,scoreboard_url,clean_id
 from university_probe import ROOT,index,resolve,identity,norm,host
 from published_link_probe import allowed_url
@@ -58,7 +58,7 @@ def from_event(event,group,idx,rows,overrides):
     keys={s:resolve(sides[s],idx) for s in ("home","away")}
     g["schools"]={s:school_link(keys[s],rows,group) for s in keys}
     g["school_keys"]=keys
-    g["team_names"]={s:sorted({norm(sides[s].get(f)) for f in ("displayName","shortDisplayName","location")}) for s in sides}
+    g["team_names"]={s:sorted({norm(sides[s].get(f)) for f in ("displayName","shortDisplayName","location")} - {""}) for s in sides}
     g["scoreboards"]={group:SCOREBOARDS[group]}
     names={s:{norm(sides[s].get(f)) for f in ("displayName","shortDisplayName","location")} for s in sides}
     g["reports"]=[]
@@ -81,19 +81,36 @@ def merge_game(g,h):
     best["scoreboards"]={**g["scoreboards"],**h["scoreboards"]}
     return best
 
+def day_ranges(days):
+    spans=[]
+    for d in sorted(set(days)):
+        if spans and d==spans[-1][-1]+timedelta(days=1):spans[-1].append(d)
+        else:spans.append([d])
+    return spans
+
 def collect(days,idx,rows,overrides,fetcher=fetch_bytes,groups=None):
     games={}
-    for day in days:
-        for group,(sport,groupid,_) in SPORTS.items():
-            if groups is not None and group not in groups.get(day,set()):continue
-            payload=json.loads(fetcher(scoreboard_url(sport,groupid,day)))
-            events=payload.get("events")
-            if not isinstance(events,list) or len(events)>=500:raise ValueError("Incomplete scoreboard "+group)
-            for event in events:
-                g=from_event(event,group,idx,rows,overrides)
-                if g["date_et"] not in {d.isoformat() for d in days}:continue
-                key=g["key"]
-                games[key]=merge_game(games[key],g) if key in games else g
+    def read(group,sport,groupid,span):
+        query=span[0].strftime("%Y%m%d")
+        if len(span)>1:query+="-"+span[-1].strftime("%Y%m%d")
+        url="https://site.api.espn.com/apis/site/v2/sports/"+sport+"/scoreboard?"+urlencode({"dates":query,"groups":groupid,"limit":500})
+        payload=json.loads(fetcher(url))
+        events=payload.get("events")
+        if not isinstance(events,list):raise ValueError("Incomplete scoreboard "+group)
+        if len(events)>=500:
+            if len(span)==1:raise ValueError("Truncated scoreboard "+group)
+            mid=len(span)//2
+            read(group,sport,groupid,span[:mid]);read(group,sport,groupid,span[mid:])
+            return
+        allowed={d.isoformat() for d in span}
+        for event in events:
+            g=from_event(event,group,idx,rows,overrides)
+            if g["date_et"] not in allowed:continue
+            key=g["key"]
+            games[key]=merge_game(games[key],g) if key in games else g
+    for group,(sport,groupid,_) in SPORTS.items():
+        for span in day_ranges(d for d in days if groups is None or group in groups.get(d,set())):
+            read(group,sport,groupid,span)
     return games
 
 def display_day(now):
@@ -115,12 +132,10 @@ def requested_days(now,prior):
         for d in window_days(group,day):
             groups.setdefault(d,set()).add(group)
     # Reconcile only previously tracked unresolved games outside normal windows.
-    pending=set()
     for g in prior.get("current",[]):
         if not g["completed"] and g["status"] not in TERMINAL:
             d=date.fromisoformat(g["date_et"])
             if d<day and any(d not in window_days(s,day) for s in g["sports"]):
-                pending.add(d)
                 groups.setdefault(d,set()).update(g["sports"])
     return groups
 
@@ -138,7 +153,7 @@ def make_feed(games,prior,cutoff,today,now,observations=None):
             if old["date_et"]!=g["date_et"]:raise ValueError("Archived game date conflict "+key)
             if not g["completed"]:g=dict(old)
         if g["completed"]:
-            g["final_seen_at"]=old.get("final_seen_at",now.isoformat()) if old else now.isoformat()
+            g["final_seen_at"]=(old.get("final_seen_at") if old else None) or now.isoformat()
         if old and old["date_et"]==g["date_et"]:
             if old.get("discovery"):g["discovery"]=old["discovery"]
             g["reports"]=list({(r.get("kind","box_score"),r["url"]):r for r in old.get("reports",[])+g.get("reports",[])}.values())
@@ -146,10 +161,11 @@ def make_feed(games,prior,cutoff,today,now,observations=None):
         if g["completed"] and g["date_et"]>=cutoff:archive[key]=g
     # Archived games remain eligible for optional enrichment even after display rollover.
     pool={**active,**archive}
+    # Disallow ambiguous same-day matchups when a reviewed observation lacks a unique event ID.
+    eligible=[r for r in (observations or []) if r.get("espn_game_id") or sum(match(g,r,r.get("kind")) for g in pool.values())==1]
     for g in pool.values():
-        # Only new/forward records are enriched; earlier games may appear as navigation only.
         if g["date_et"]>=cutoff:
-            apply_links(g,observations or [],now)
+            apply_links(g,eligible,now)
     current=[]
     for g in pool.values():
         d=date.fromisoformat(g["date_et"])
@@ -184,5 +200,5 @@ def main():
     games={k:g for k,g in games.items() if k in known or any(date.fromisoformat(g["date_et"]) in window_days(s,today) for s in g["sports"])}
     data=make_feed(games,prior,cutoff,today,now,read_overrides(a.observations))
     write_feed(a.output,data)
-    print("TRACKER",json.dumps({"today":today.isoformat(),"current":len(data["current"]),"archive":len(data["archive"]),"schedule_shortcuts":sum(any(s and s["schedule_shortcut"] for s in g["schools"].values()) for g in data["current"]),"reviewed_reports":sum(bool(g["reports"]) for g in data["current"]),"source":"ESPN only"}))
+    print("TRACKER",json.dumps({"today":today.isoformat(),"current":len(data["current"]),"archive":len(data["archive"]),"schedule_shortcuts":sum(any(s and s["schedule_shortcut"] for s in g["schools"].values()) for g in data["current"]),"reviewed_reports":sum(bool(g["reports"]) for g in data["current"]),"source":"ESPN and reviewed link observations","display_day":today.isoformat(),"optional_discovery_source":data["optional_discovery_source"],"game_centers":sum(any(r.get("kind")=="game_center" for r in g["reports"]) for g in data["current"])}))
 if __name__=="__main__":main()
