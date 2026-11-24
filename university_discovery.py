@@ -1,4 +1,4 @@
-"""Limited production PDF discovery: explicitly configured women's basketball sources.
+"""Limited production PDF discovery: explicitly configured basketball sources.
 
 Uses the same bounded, robots-aware source as the successful read-only probe.
 Never modifies game identities, scores, archive membership, or existing reports.
@@ -21,14 +21,26 @@ from university_link_acquisition_probe import (
     AGENT, BASE, SOURCE, candidates, get, download_link, get_pdf, pdf_identity, cdn_allowed,
 )
 
-SOURCE_NAME = "reviewed_links_plus_verified_wbb_pdf_sources"
+SOURCE_NAME = "reviewed_links_plus_verified_basketball_pdf_sources"
 STATE_KEY = "university_discovery"
 SOURCES = {
     "vanderbilt": {"name": "Vanderbilt University", "pdf_name": "Vanderbilt", "host": "vucommodores.com", "path": "/sports/wbball/schedule", "prefix": "/vucommodores-prod/"},
     "iowa": {"name": "University of Iowa", "pdf_name": "Iowa", "host": "hawkeyesports.com", "path": "/sports/wbball/schedule", "prefix": "/hawkeyesports-prod/"},
     "miami_florida": {"name": "University of Miami", "pdf_name": "Miami (FL)", "host": "miamihurricanes.com", "path": "/sports/wbball/schedule", "prefix": "/miamihurricanes-com-prod/", "pdf_labels": ("box score (pdf)", "gamebook")},
+    "lsu": {"name": "Louisiana State University", "pdf_name": "LSU", "host": "lsusports.net", "path": "/sports/wbball/schedule", "prefix": "/lsusports-net-prod/", "pdf_labels": ("box score (.pdf)",), "repeat_date": True},
+    "san_jose_state": {"name": "San Jose State University", "pdf_name": "San Jose St.", "host": "sjsuspartans.com", "path": "/sports/mens-basketball/schedule", "prefix": "/san-jose-state-prod/", "sport": "MBB", "compact_date": True},
+    "virginia_tech": {"name": "Virginia Tech", "pdf_name": "Virginia Tech", "host": "hokiesports.com", "path": "/sports/womens-basketball/schedule", "prefix": "/virginiatech-prod/", "heading_order": "sport_first", "short_result": True},
 }
 MAX_SOURCES_PER_RUN = 3
+
+def sport_of(g):
+    sports = g.get("sports", [])
+    return sports[0] if len(sports) == 1 and sports[0] in ("WBB", "MBB") else None
+
+def source_for(g, side):
+    config = SOURCES.get(g.get("school_keys", {}).get(side))
+    return config if config and config.get("sport", "WBB") == sport_of(g) else None
+
 
 
 def state_for(feed):
@@ -47,16 +59,16 @@ def eligible(feed, now):
     pool = {g["key"]: g for g in feed["current"] + feed["archive"]}
     result = []
     for g in pool.values():
-        if (not g.get("completed") or "WBB" not in g["sports"] or
+        if (not g.get("completed") or not sport_of(g) or
                 g["date_et"] < feed["archive_start"] or
                 any(r.get("kind") == "pdf_box_score" for r in g.get("reports", []))):
             continue
         sides = g.get("school_keys", {})
-        own = [s for s in ("home", "away") if sides.get(s) in SOURCES and sides[s] not in state["blocked_sources"]]
+        own = [s for s in ("home", "away") if source_for(g, s) and sides[s] not in state["blocked_sources"]]
         if not own or not all(g.get("team_ids", {}).get(s) for s in ("home", "away")):
             continue
         # A same-day repeat matchup is not safe to identify by schedule row.
-        if sum(h["date_et"] == g["date_et"] and "WBB" in h["sports"] and
+        if sum(h["date_et"] == g["date_et"] and sport_of(h) == sport_of(g) and
                set(h.get("team_ids", {}).values()) == set(g["team_ids"].values())
                for h in pool.values()) != 1:
             continue
@@ -79,7 +91,10 @@ def eligible(feed, now):
 def acquire(g, own):
     if not shutil.which("pdftotext"):
         raise OSError("PDF verification dependency unavailable")
-    config = SOURCES[g["school_keys"][own]]
+    config = source_for(g, own)
+    if not config:
+        return None
+    sport = sport_of(g)
     base = "https://" + config["host"]
     source = base + config["path"]
     def school_get(url, media):
@@ -107,6 +122,7 @@ def acquire(g, own):
         school_get(source, "text/html"), aliases=aliases, include_labels=True, season=season,
         source=source, cdn_prefix=config["prefix"], heading_order=config.get("heading_order", "season_first"),
         short_result=config.get("short_result", False), pdf_labels=config.get("pdf_labels", ("box score (pdf)",)),
+        sport=sport, repeat_date=config.get("repeat_date", False), compact_date=config.get("compact_date", False),
         day=f"{day.strftime('%b')} {day.day}",
         result=f"{'Win' if own_score > other_score else 'Loss'} {own_score}-{other_score}",
     )
@@ -123,7 +139,7 @@ def acquire(g, own):
             return None
     pdf_text = get_pdf(pdf_url, config["prefix"])
     if not any(pdf_identity(pdf_text, opponent=label, day=f"{day.month}/{day.day}/{day.year % 100:02}",
-                            own_score=own_score, opponent_score=other_score, season=season, own_name=config["pdf_name"])
+                            own_score=own_score, opponent_score=other_score, season=season, own_name=config["pdf_name"], sport=sport)
                for label in links["opponent_labels"]):
         return None
     return {"kind": "pdf_box_score", "url": pdf_url, "school": config["name"],

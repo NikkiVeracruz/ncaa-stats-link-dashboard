@@ -44,17 +44,20 @@ jobs:
           python tracker.py --archive-start "$(TZ=America/New_York date +%F)" --output preview/feed.json
           cp site/index.html site/app.js site/style.css preview/
       - name: Install PDF text verification tool for isolated trial
-        if: github.head_ref == 'research/bounded-vanderbilt-report-discovery' || github.head_ref == 'feat/verified-wmt-school-pdf-expansion'
+        if: github.head_ref == 'research/bounded-vanderbilt-report-discovery' || github.head_ref == 'feat/verified-wmt-school-pdf-expansion' || github.head_ref == 'feat/wmt-basketball-both-sports'
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends poppler-utils
           command -v pdftotext
       - name: One bounded official schedule acquisition trial
-        if: github.head_ref == 'research/bounded-vanderbilt-report-discovery' || github.head_ref == 'feat/verified-wmt-school-pdf-expansion'
+        if: github.head_ref == 'research/bounded-vanderbilt-report-discovery' || github.head_ref == 'feat/verified-wmt-school-pdf-expansion' || github.head_ref == 'feat/wmt-basketball-both-sports'
         run: python university_discovery.py --live-control
       - name: Verify two additional school PDFs in read-only feed
-        if: github.head_ref == 'feat/verified-wmt-school-pdf-expansion'
+        if: github.head_ref == 'feat/verified-wmt-school-pdf-expansion' || github.head_ref == 'feat/wmt-basketball-both-sports'
         run: python university_expansion_control.py
+      - name: Verify new men's and women's basketball sources in read-only feed
+        if: github.head_ref == 'feat/wmt-basketball-both-sports'
+        run: python basketball_expansion_control.py
       - name: Save standalone preview
         uses: actions/upload-artifact@v4
         with:
