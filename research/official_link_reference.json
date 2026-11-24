@@ -1,0 +1,2297 @@
+[
+  {
+    "date": "2026-11-21",
+    "id": "6601304",
+    "teams": [
+      {
+        "name": "BYU",
+        "score": 31
+      },
+      {
+        "name": "Kansas",
+        "score": 29
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6599016",
+    "teams": [
+      {
+        "name": "Wofford",
+        "score": 17
+      },
+      {
+        "name": "Ole Miss",
+        "score": 59
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6617031",
+    "teams": [
+      {
+        "name": "Ohio St.",
+        "score": 28
+      },
+      {
+        "name": "Nebraska",
+        "score": 31
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6584498",
+    "teams": [
+      {
+        "name": "Northwestern",
+        "score": 17
+      },
+      {
+        "name": "Minnesota",
+        "score": 20
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6586560",
+    "teams": [
+      {
+        "name": "North Texas",
+        "score": 24
+      },
+      {
+        "name": "Tulane",
+        "score": 28
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6586335",
+    "teams": [
+      {
+        "name": "Memphis",
+        "score": 34
+      },
+      {
+        "name": "Navy",
+        "score": 38
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6610919",
+    "teams": [
+      {
+        "name": "Colorado",
+        "score": 28
+      },
+      {
+        "name": "Cincinnati",
+        "score": 35
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6618368",
+    "teams": [
+      {
+        "name": "Wake Forest",
+        "score": 50
+      },
+      {
+        "name": "Georgia Tech",
+        "score": 29
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6620919",
+    "teams": [
+      {
+        "name": "Syracuse",
+        "score": 15
+      },
+      {
+        "name": "Boston College",
+        "score": 27
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6619450",
+    "teams": [
+      {
+        "name": "Wisconsin",
+        "score": 42
+      },
+      {
+        "name": "Purdue",
+        "score": 10
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6590947",
+    "teams": [
+      {
+        "name": "East Carolina",
+        "score": 10
+      },
+      {
+        "name": "Army West Point",
+        "score": 6
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6583182",
+    "teams": [
+      {
+        "name": "Vanderbilt",
+        "score": 27
+      },
+      {
+        "name": "Florida",
+        "score": 34
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6597639",
+    "teams": [
+      {
+        "name": "North Carolina",
+        "score": 24
+      },
+      {
+        "name": "Virginia",
+        "score": 41
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6601473",
+    "teams": [
+      {
+        "name": "Houston",
+        "score": 34
+      },
+      {
+        "name": "West Virginia",
+        "score": 31
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6617093",
+    "teams": [
+      {
+        "name": "Tennessee Tech",
+        "score": 16
+      },
+      {
+        "name": "Mississippi St.",
+        "score": 34
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6605242",
+    "teams": [
+      {
+        "name": "Western Ky.",
+        "score": 14
+      },
+      {
+        "name": "Liberty",
+        "score": 45
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6607062",
+    "teams": [
+      {
+        "name": "Missouri St.",
+        "score": 20
+      },
+      {
+        "name": "Jacksonville St.",
+        "score": 25
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6582897",
+    "teams": [
+      {
+        "name": "Charlotte",
+        "score": 14
+      },
+      {
+        "name": "Tulsa",
+        "score": 42
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6591603",
+    "teams": [
+      {
+        "name": "Middle Tenn.",
+        "score": 31
+      },
+      {
+        "name": "Sam Houston",
+        "score": 28
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6620505",
+    "teams": [
+      {
+        "name": "Chattanooga",
+        "score": 0
+      },
+      {
+        "name": "Alabama",
+        "score": 47
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6611481",
+    "teams": [
+      {
+        "name": "South Fla.",
+        "score": 14
+      },
+      {
+        "name": "Fla. Atlantic",
+        "score": 35
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6586038",
+    "teams": [
+      {
+        "name": "ULM",
+        "score": 16
+      },
+      {
+        "name": "App State",
+        "score": 17
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6589593",
+    "teams": [
+      {
+        "name": "Iowa",
+        "score": 34
+      },
+      {
+        "name": "Illinois",
+        "score": 17
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6587698",
+    "teams": [
+      {
+        "name": "Coastal Carolina",
+        "score": 24
+      },
+      {
+        "name": "Louisiana",
+        "score": 38
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6590858",
+    "teams": [
+      {
+        "name": "FIU",
+        "score": 24
+      },
+      {
+        "name": "Kennesaw St.",
+        "score": 35
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6601584",
+    "teams": [
+      {
+        "name": "Delaware",
+        "score": 42
+      },
+      {
+        "name": "New Mexico St.",
+        "score": 30
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6600639",
+    "teams": [
+      {
+        "name": "Texas Tech",
+        "score": 20
+      },
+      {
+        "name": "Baylor",
+        "score": 10
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6599199",
+    "teams": [
+      {
+        "name": "Samford",
+        "score": 17
+      },
+      {
+        "name": "Auburn",
+        "score": 59
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6594351",
+    "teams": [
+      {
+        "name": "Indiana",
+        "score": 24
+      },
+      {
+        "name": "Washington",
+        "score": 27
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6587786",
+    "teams": [
+      {
+        "name": "Arkansas",
+        "score": 3
+      },
+      {
+        "name": "Texas",
+        "score": 45
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6590427",
+    "teams": [
+      {
+        "name": "LSU",
+        "score": 13
+      },
+      {
+        "name": "Tennessee",
+        "score": 27
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6587764",
+    "teams": [
+      {
+        "name": "Rutgers",
+        "score": 25
+      },
+      {
+        "name": "Penn St.",
+        "score": 24
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6594426",
+    "teams": [
+      {
+        "name": "NC State",
+        "score": 28
+      },
+      {
+        "name": "Florida St.",
+        "score": 10
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6608533",
+    "teams": [
+      {
+        "name": "Old Dominion",
+        "score": 21
+      },
+      {
+        "name": "UConn",
+        "score": 29
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6603320",
+    "teams": [
+      {
+        "name": "UCLA",
+        "score": 16
+      },
+      {
+        "name": "Michigan",
+        "score": 18
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6607430",
+    "teams": [
+      {
+        "name": "Texas A&M",
+        "score": 7
+      },
+      {
+        "name": "Oklahoma",
+        "score": 28
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6588749",
+    "teams": [
+      {
+        "name": "Ga. Southern",
+        "score": 45
+      },
+      {
+        "name": "Troy",
+        "score": 7
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6593083",
+    "teams": [
+      {
+        "name": "South Alabama",
+        "score": 40
+      },
+      {
+        "name": "Southern Miss.",
+        "score": 35
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6598568",
+    "teams": [
+      {
+        "name": "Georgia St.",
+        "score": 27
+      },
+      {
+        "name": "Marshall",
+        "score": 28
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6603635",
+    "teams": [
+      {
+        "name": "NIU",
+        "score": 25
+      },
+      {
+        "name": "North Dakota St.",
+        "score": 31
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6608949",
+    "teams": [
+      {
+        "name": "Washington St.",
+        "score": 14
+      },
+      {
+        "name": "Texas St.",
+        "score": 42
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6604179",
+    "teams": [
+      {
+        "name": "Maryland",
+        "score": 21
+      },
+      {
+        "name": "Southern California",
+        "score": 35
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6583006",
+    "teams": [
+      {
+        "name": "UNLV",
+        "score": 24
+      },
+      {
+        "name": "San Jose St.",
+        "score": 22
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6619558",
+    "teams": [
+      {
+        "name": "Arkansas St.",
+        "score": 3
+      },
+      {
+        "name": "Louisiana Tech",
+        "score": 48
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6589821",
+    "teams": [
+      {
+        "name": "Virginia Tech",
+        "score": 20
+      },
+      {
+        "name": "Miami (FL)",
+        "score": 28
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6609178",
+    "teams": [
+      {
+        "name": "Arizona",
+        "score": 35
+      },
+      {
+        "name": "Kansas St.",
+        "score": 28
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6602813",
+    "teams": [
+      {
+        "name": "Stanford",
+        "score": 44
+      },
+      {
+        "name": "California",
+        "score": 28
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6602314",
+    "teams": [
+      {
+        "name": "Kentucky",
+        "score": 14
+      },
+      {
+        "name": "Missouri",
+        "score": 28
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6604104",
+    "teams": [
+      {
+        "name": "SMU",
+        "score": 3
+      },
+      {
+        "name": "Notre Dame",
+        "score": 24
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6620679",
+    "teams": [
+      {
+        "name": "Pittsburgh",
+        "score": 10
+      },
+      {
+        "name": "Louisville",
+        "score": 42
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6593399",
+    "teams": [
+      {
+        "name": "Georgia",
+        "score": 34
+      },
+      {
+        "name": "South Carolina",
+        "score": 6
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6607463",
+    "teams": [
+      {
+        "name": "Colorado St.",
+        "score": 42
+      },
+      {
+        "name": "Fresno St.",
+        "score": 49
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6586580",
+    "teams": [
+      {
+        "name": "UTSA",
+        "score": 19
+      },
+      {
+        "name": "UAB",
+        "score": 17
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6602482",
+    "teams": [
+      {
+        "name": "Utah",
+        "score": 38
+      },
+      {
+        "name": "TCU",
+        "score": 17
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6612610",
+    "teams": [
+      {
+        "name": "San Diego St.",
+        "score": 22
+      },
+      {
+        "name": "Boise St.",
+        "score": 20
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6590614",
+    "teams": [
+      {
+        "name": "Oklahoma St.",
+        "score": 30
+      },
+      {
+        "name": "Arizona St.",
+        "score": 27
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6613554",
+    "teams": [
+      {
+        "name": "Utah St.",
+        "score": 24
+      },
+      {
+        "name": "Oregon St.",
+        "score": 31
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "date": "2026-11-21",
+    "id": "6607905",
+    "teams": [
+      {
+        "name": "Hawaii",
+        "score": 8
+      },
+      {
+        "name": "Nevada",
+        "score": 16
+      }
+    ],
+    "sport": "FBS"
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6609570",
+    "teams": [
+      {
+        "name": "Cornell",
+        "score": 45
+      },
+      {
+        "name": "Columbia",
+        "score": 46
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6606319",
+    "teams": [
+      {
+        "name": "UAlbany",
+        "score": 24
+      },
+      {
+        "name": "N.C. A&T",
+        "score": 7
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6592613",
+    "teams": [
+      {
+        "name": "Fordham",
+        "score": 10
+      },
+      {
+        "name": "Holy Cross",
+        "score": 20
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6583363",
+    "teams": [
+      {
+        "name": "New Haven",
+        "score": 13
+      },
+      {
+        "name": "Mercyhurst",
+        "score": 31
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6585956",
+    "teams": [
+      {
+        "name": "Howard",
+        "score": 7
+      },
+      {
+        "name": "Norfolk St.",
+        "score": 35
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6583404",
+    "teams": [
+      {
+        "name": "Sacred Heart",
+        "score": 35
+      },
+      {
+        "name": "Merrimack",
+        "score": 10
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6590475",
+    "teams": [
+      {
+        "name": "Penn",
+        "score": 19
+      },
+      {
+        "name": "Princeton",
+        "score": 12
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6584937",
+    "teams": [
+      {
+        "name": "Hampton",
+        "score": 10
+      },
+      {
+        "name": "Stony Brook",
+        "score": 20
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6599016",
+    "teams": [
+      {
+        "name": "Wofford",
+        "score": 17
+      },
+      {
+        "name": "Ole Miss",
+        "score": 59
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6620499",
+    "teams": [
+      {
+        "name": "Furman",
+        "score": 35
+      },
+      {
+        "name": "VMI",
+        "score": 3
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6618113",
+    "teams": [
+      {
+        "name": "Lehigh",
+        "score": 51
+      },
+      {
+        "name": "Lafayette",
+        "score": 48
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6615139",
+    "teams": [
+      {
+        "name": "Duquesne",
+        "score": 24
+      },
+      {
+        "name": "Central Conn. St.",
+        "score": 17
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6616267",
+    "teams": [
+      {
+        "name": "LIU",
+        "score": 26
+      },
+      {
+        "name": "Robert Morris",
+        "score": 22
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6610094",
+    "teams": [
+      {
+        "name": "Wagner",
+        "score": 35
+      },
+      {
+        "name": "Stonehill",
+        "score": 31
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6607808",
+    "teams": [
+      {
+        "name": "William & Mary",
+        "score": 16
+      },
+      {
+        "name": "Richmond",
+        "score": 17
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6601975",
+    "teams": [
+      {
+        "name": "Brown",
+        "score": 7
+      },
+      {
+        "name": "Dartmouth",
+        "score": 17
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6584531",
+    "teams": [
+      {
+        "name": "The Citadel",
+        "score": 23
+      },
+      {
+        "name": "Western Caro.",
+        "score": 38
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6608339",
+    "teams": [
+      {
+        "name": "Dayton",
+        "score": 27
+      },
+      {
+        "name": "Presbyterian",
+        "score": 11
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6604428",
+    "teams": [
+      {
+        "name": "New Hampshire",
+        "score": 24
+      },
+      {
+        "name": "Maine",
+        "score": 21
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6604279",
+    "teams": [
+      {
+        "name": "Morehead St.",
+        "score": 7
+      },
+      {
+        "name": "Butler",
+        "score": 24
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6594218",
+    "teams": [
+      {
+        "name": "South Dakota",
+        "score": 10
+      },
+      {
+        "name": "Illinois St.",
+        "score": 3
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6597091",
+    "teams": [
+      {
+        "name": "Rhode Island",
+        "score": 7
+      },
+      {
+        "name": "Bryant",
+        "score": 28
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6599426",
+    "teams": [
+      {
+        "name": "Georgetown",
+        "score": 13
+      },
+      {
+        "name": "Villanova",
+        "score": 34
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6585886",
+    "teams": [
+      {
+        "name": "Elon",
+        "score": 24
+      },
+      {
+        "name": "Towson",
+        "score": 28
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6610229",
+    "teams": [
+      {
+        "name": "Colgate",
+        "score": 21
+      },
+      {
+        "name": "Bucknell",
+        "score": 20
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6617093",
+    "teams": [
+      {
+        "name": "Tennessee Tech",
+        "score": 16
+      },
+      {
+        "name": "Mississippi St.",
+        "score": 34
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6595733",
+    "teams": [
+      {
+        "name": "Monmouth",
+        "score": 55
+      },
+      {
+        "name": "Campbell",
+        "score": 49
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6620524",
+    "teams": [
+      {
+        "name": "Marist",
+        "score": 35
+      },
+      {
+        "name": "Davidson",
+        "score": 7
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6601173",
+    "teams": [
+      {
+        "name": "Charleston So.",
+        "score": 17
+      },
+      {
+        "name": "Eastern Ill.",
+        "score": 20
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6607152",
+    "teams": [
+      {
+        "name": "Delaware St.",
+        "score": 16
+      },
+      {
+        "name": "South Carolina St.",
+        "score": 26
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6620449",
+    "teams": [
+      {
+        "name": "Tennessee St.",
+        "score": 16
+      },
+      {
+        "name": "Gardner-Webb",
+        "score": 12
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6620482",
+    "teams": [
+      {
+        "name": "UNI",
+        "score": 14
+      },
+      {
+        "name": "Murray St.",
+        "score": 51
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6620475",
+    "teams": [
+      {
+        "name": "Southern Ill.",
+        "score": 23
+      },
+      {
+        "name": "North Dakota",
+        "score": 28
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6620505",
+    "teams": [
+      {
+        "name": "Chattanooga",
+        "score": 0
+      },
+      {
+        "name": "Alabama",
+        "score": 47
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6610447",
+    "teams": [
+      {
+        "name": "UT Martin",
+        "score": 51
+      },
+      {
+        "name": "Southeast Mo. St.",
+        "score": 47
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6620526",
+    "teams": [
+      {
+        "name": "Montana",
+        "score": 16
+      },
+      {
+        "name": "Montana St.",
+        "score": 42
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6596185",
+    "teams": [
+      {
+        "name": "St. Thomas (MN)",
+        "score": 13
+      },
+      {
+        "name": "Valparaiso",
+        "score": 7
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6588943",
+    "teams": [
+      {
+        "name": "West Florida",
+        "score": 24
+      },
+      {
+        "name": "West Ga.",
+        "score": 16
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6612544",
+    "teams": [
+      {
+        "name": "Morgan St.",
+        "score": 31
+      },
+      {
+        "name": "N.C. Central",
+        "score": 41
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6590864",
+    "teams": [
+      {
+        "name": "Eastern Ky.",
+        "score": 44
+      },
+      {
+        "name": "Abilene Christian",
+        "score": 25
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6620518",
+    "teams": [
+      {
+        "name": "Prairie View",
+        "score": 45
+      },
+      {
+        "name": "Alabama St.",
+        "score": 10
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6603903",
+    "teams": [
+      {
+        "name": "Jackson St.",
+        "score": 54
+      },
+      {
+        "name": "Alcorn",
+        "score": 40
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6583444",
+    "teams": [
+      {
+        "name": "Western Ill.",
+        "score": 41
+      },
+      {
+        "name": "Lindenwood",
+        "score": 7
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6600997",
+    "teams": [
+      {
+        "name": "Indiana St.",
+        "score": 13
+      },
+      {
+        "name": "South Dakota St.",
+        "score": 52
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6599613",
+    "teams": [
+      {
+        "name": "ETSU",
+        "score": 25
+      },
+      {
+        "name": "Mercer",
+        "score": 28
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6589965",
+    "teams": [
+      {
+        "name": "Utah Tech",
+        "score": 24
+      },
+      {
+        "name": "Weber St.",
+        "score": 31
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6583597",
+    "teams": [
+      {
+        "name": "Alabama A&M",
+        "score": 51
+      },
+      {
+        "name": "Mississippi Val.",
+        "score": 19
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6599199",
+    "teams": [
+      {
+        "name": "Samford",
+        "score": 17
+      },
+      {
+        "name": "Auburn",
+        "score": 59
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6606660",
+    "teams": [
+      {
+        "name": "Yale",
+        "score": 20
+      },
+      {
+        "name": "Harvard",
+        "score": 17
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6620445",
+    "teams": [
+      {
+        "name": "Florida A&M",
+        "score": 27
+      },
+      {
+        "name": "Bethune-Cookman",
+        "score": 14
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6583022",
+    "teams": [
+      {
+        "name": "UIW",
+        "score": 66
+      },
+      {
+        "name": "East Texas A&M",
+        "score": 3
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6620469",
+    "teams": [
+      {
+        "name": "Tarleton St.",
+        "score": 31
+      },
+      {
+        "name": "North Ala.",
+        "score": 24
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6592884",
+    "teams": [
+      {
+        "name": "Northern Colo.",
+        "score": 26
+      },
+      {
+        "name": "Northern Ariz.",
+        "score": 35
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6607925",
+    "teams": [
+      {
+        "name": "Cal Poly",
+        "score": 43
+      },
+      {
+        "name": "UC Davis",
+        "score": 44
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6603651",
+    "teams": [
+      {
+        "name": "Ark.-Pine Bluff",
+        "score": 42
+      },
+      {
+        "name": "Texas Southern",
+        "score": 17
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6594831",
+    "teams": [
+      {
+        "name": "Portland St.",
+        "score": 40
+      },
+      {
+        "name": "Eastern Wash.",
+        "score": 38
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6620463",
+    "teams": [
+      {
+        "name": "Austin Peay",
+        "score": 17
+      },
+      {
+        "name": "Central Ark.",
+        "score": 24
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6587316",
+    "teams": [
+      {
+        "name": "UTRGV",
+        "score": 26
+      },
+      {
+        "name": "Houston Christian",
+        "score": 14
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6593992",
+    "teams": [
+      {
+        "name": "Chicago St.",
+        "score": 3
+      },
+      {
+        "name": "Southern Utah",
+        "score": 65
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6593162",
+    "teams": [
+      {
+        "name": "Idaho",
+        "score": 5
+      },
+      {
+        "name": "Idaho St.",
+        "score": 19
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6607691",
+    "teams": [
+      {
+        "name": "Lamar University",
+        "score": 19
+      },
+      {
+        "name": "McNeese",
+        "score": 17
+      }
+    ]
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "id": "6616521",
+    "teams": [
+      {
+        "name": "Stetson",
+        "score": 21
+      },
+      {
+        "name": "San Diego",
+        "score": 59
+      }
+    ]
+  },
+  {
+    "sport": "MBB",
+    "date": "2026-11-23",
+    "id": "6636375",
+    "teams": [
+      {
+        "name": "UNI",
+        "score": 48
+      },
+      {
+        "name": "Davidson",
+        "score": 79
+      }
+    ]
+  },
+  {
+    "sport": "MBB",
+    "date": "2026-11-23",
+    "id": "6647707",
+    "teams": [
+      {
+        "name": "St. Bonaventure",
+        "score": 71
+      },
+      {
+        "name": "App State",
+        "score": 65
+      }
+    ]
+  },
+  {
+    "sport": "MBB",
+    "date": "2026-11-23",
+    "id": "6667190",
+    "teams": [
+      {
+        "name": "Indiana St.",
+        "score": 77
+      },
+      {
+        "name": "East Carolina",
+        "score": 76
+      }
+    ]
+  },
+  {
+    "sport": "MBB",
+    "date": "2026-11-23",
+    "id": "6641444",
+    "teams": [
+      {
+        "name": "Long Beach St.",
+        "score": 75
+      },
+      {
+        "name": "FIU",
+        "score": 79
+      }
+    ]
+  },
+  {
+    "sport": "MBB",
+    "date": "2026-11-23",
+    "id": "6636635",
+    "teams": [
+      {
+        "name": "Ind.-South Bend",
+        "score": 66
+      },
+      {
+        "name": "Eastern Ill.",
+        "score": 83
+      }
+    ]
+  },
+  {
+    "sport": "MBB",
+    "date": "2026-11-23",
+    "id": "6657311",
+    "teams": [
+      {
+        "name": "Ecclesia",
+        "score": 45
+      },
+      {
+        "name": "Grambling",
+        "score": 126
+      }
+    ]
+  },
+  {
+    "sport": "MBB",
+    "date": "2026-11-23",
+    "id": "6656716",
+    "teams": [
+      {
+        "name": "Akron",
+        "score": 64
+      },
+      {
+        "name": "Wright St.",
+        "score": 66
+      }
+    ]
+  },
+  {
+    "sport": "MBB",
+    "date": "2026-11-23",
+    "id": "6644358",
+    "teams": [
+      {
+        "name": "Charlotte",
+        "score": 71
+      },
+      {
+        "name": "FGCU",
+        "score": 58
+      }
+    ]
+  },
+  {
+    "sport": "MBB",
+    "date": "2026-11-23",
+    "id": "6643100",
+    "teams": [
+      {
+        "name": "Oregon St.",
+        "score": 69
+      },
+      {
+        "name": "Tulsa",
+        "score": 66
+      }
+    ]
+  },
+  {
+    "sport": "MBB",
+    "date": "2026-11-23",
+    "id": "6639562",
+    "teams": [
+      {
+        "name": "Ole Miss",
+        "score": 82
+      },
+      {
+        "name": "Clemson",
+        "score": 62
+      }
+    ]
+  },
+  {
+    "sport": "MBB",
+    "date": "2026-11-23",
+    "id": "6667189",
+    "teams": [
+      {
+        "name": "Middle Tenn.",
+        "score": 77
+      },
+      {
+        "name": "Southern Ill.",
+        "score": 76
+      }
+    ]
+  },
+  {
+    "sport": "MBB",
+    "date": "2026-11-23",
+    "id": "6647184",
+    "teams": [
+      {
+        "name": "Southern Utah",
+        "score": 102
+      },
+      {
+        "name": "Arkansas St.",
+        "score": 104
+      }
+    ]
+  },
+  {
+    "sport": "MBB",
+    "date": "2026-11-23",
+    "id": "6638087",
+    "teams": [
+      {
+        "name": "William & Mary",
+        "score": 87
+      },
+      {
+        "name": "IU Indy",
+        "score": 82
+      }
+    ]
+  },
+  {
+    "sport": "MBB",
+    "date": "2026-11-23",
+    "id": "6624979",
+    "teams": [
+      {
+        "name": "Yale",
+        "score": 60
+      },
+      {
+        "name": "Belmont",
+        "score": 68
+      }
+    ]
+  },
+  {
+    "sport": "MBB",
+    "date": "2026-11-23",
+    "id": "6641192",
+    "teams": [
+      {
+        "name": "Tulane",
+        "score": 63
+      },
+      {
+        "name": "Georgia St.",
+        "score": 73
+      }
+    ]
+  },
+  {
+    "sport": "MBB",
+    "date": "2026-11-23",
+    "id": "6631217",
+    "teams": [
+      {
+        "name": "San Francisco",
+        "score": 62
+      },
+      {
+        "name": "Nevada",
+        "score": 71
+      }
+    ]
+  },
+  {
+    "sport": "MBB",
+    "date": "2026-11-23",
+    "id": "6660648",
+    "teams": [
+      {
+        "name": "Washington",
+        "score": 77
+      },
+      {
+        "name": "BYU",
+        "score": 83
+      }
+    ]
+  },
+  {
+    "sport": "WBB",
+    "date": "2026-11-23",
+    "id": "6652446",
+    "teams": [
+      {
+        "name": "Toledo",
+        "score": 72
+      },
+      {
+        "name": "Navy",
+        "score": 51
+      }
+    ]
+  },
+  {
+    "sport": "WBB",
+    "date": "2026-11-23",
+    "id": "6662431",
+    "teams": [
+      {
+        "name": "Alcorn",
+        "score": 44
+      },
+      {
+        "name": "Michigan St.",
+        "score": 94
+      }
+    ]
+  },
+  {
+    "sport": "WBB",
+    "date": "2026-11-23",
+    "id": "6654879",
+    "teams": [
+      {
+        "name": "Oregon St.",
+        "score": 54
+      },
+      {
+        "name": "Middle Tenn.",
+        "score": 63
+      }
+    ]
+  },
+  {
+    "sport": "WBB",
+    "date": "2026-11-23",
+    "id": "6632599",
+    "teams": [
+      {
+        "name": "St. Bonaventure",
+        "score": 62
+      },
+      {
+        "name": "Chattanooga",
+        "score": 55
+      }
+    ]
+  },
+  {
+    "sport": "WBB",
+    "date": "2026-11-23",
+    "id": "6639269",
+    "teams": [
+      {
+        "name": "Iowa",
+        "score": 75
+      },
+      {
+        "name": "Utah",
+        "score": 66
+      }
+    ]
+  },
+  {
+    "sport": "WBB",
+    "date": "2026-11-23",
+    "id": "6652570",
+    "teams": [
+      {
+        "name": "Virginia Tech",
+        "score": 85
+      },
+      {
+        "name": "UT Martin",
+        "score": 41
+      }
+    ]
+  },
+  {
+    "sport": "WBB",
+    "date": "2026-11-23",
+    "id": "6646261",
+    "teams": [
+      {
+        "name": "Virginia",
+        "score": 66
+      },
+      {
+        "name": "Oklahoma",
+        "score": 86
+      }
+    ]
+  },
+  {
+    "sport": "WBB",
+    "date": "2026-11-23",
+    "id": "6629730",
+    "teams": [
+      {
+        "name": "High Point",
+        "score": 54
+      },
+      {
+        "name": "Grand Canyon",
+        "score": 60
+      }
+    ]
+  },
+  {
+    "sport": "WBB",
+    "date": "2026-11-23",
+    "id": "6672157",
+    "teams": [
+      {
+        "name": "Memphis",
+        "score": 79
+      },
+      {
+        "name": "Old Dominion",
+        "score": 76
+      }
+    ]
+  },
+  {
+    "sport": "WBB",
+    "date": "2026-11-23",
+    "id": "6638831",
+    "teams": [
+      {
+        "name": "Miami (FL)",
+        "score": 58
+      },
+      {
+        "name": "Michigan",
+        "score": 79
+      }
+    ]
+  },
+  {
+    "sport": "WBB",
+    "date": "2026-11-23",
+    "id": "6643659",
+    "teams": [
+      {
+        "name": "Elon",
+        "score": 74
+      },
+      {
+        "name": "N.C. Central",
+        "score": 54
+      }
+    ]
+  },
+  {
+    "sport": "WBB",
+    "date": "2026-11-23",
+    "id": "6648117",
+    "teams": [
+      {
+        "name": "Vanderbilt",
+        "score": 93
+      },
+      {
+        "name": "Arizona",
+        "score": 62
+      }
+    ]
+  },
+  {
+    "sport": "WBB",
+    "date": "2026-11-23",
+    "id": "6649831",
+    "teams": [
+      {
+        "name": "Gonzaga",
+        "score": 60
+      },
+      {
+        "name": "California",
+        "score": 71
+      }
+    ]
+  },
+  {
+    "sport": "WBB",
+    "date": "2026-11-23",
+    "id": "6639948",
+    "teams": [
+      {
+        "name": "Canisius",
+        "score": 43
+      },
+      {
+        "name": "Duquesne",
+        "score": 59
+      }
+    ]
+  },
+  {
+    "sport": "WBB",
+    "date": "2026-11-23",
+    "id": "6664343",
+    "teams": [
+      {
+        "name": "Morgan St.",
+        "score": 55
+      },
+      {
+        "name": "VCU",
+        "score": 65
+      }
+    ]
+  },
+  {
+    "sport": "WBB",
+    "date": "2026-11-23",
+    "id": "6630718",
+    "teams": [
+      {
+        "name": "Wofford",
+        "score": 48
+      },
+      {
+        "name": "Wake Forest",
+        "score": 84
+      }
+    ]
+  }
+]
