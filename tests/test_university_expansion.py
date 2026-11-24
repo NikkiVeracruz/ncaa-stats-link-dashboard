@@ -13,7 +13,7 @@ class ExpansionTests(unittest.TestCase):
         feed = fixture()
         before = copy.deepcopy(feed["archive"])
         def verified(g, side):
-            return {"kind":"pdf_box_score", "url":"https://storage.googleapis.com" + SOURCES[g["school_keys"][side]]["prefix"] + "test.pdf", "side":side}
+            return {"kind":"pdf_box_score", "url":"https://storage.googleapis.com" + SOURCES[g["school_keys"][side]][g["sports"][0]]["prefix"] + "test.pdf", "side":side}
         enrich(feed, NOW, verified)
         self.assertEqual(len([g for g in feed["archive"] if g["reports"]]), 2)
         self.assertEqual(feed["archive"], feed["current"])
@@ -50,6 +50,7 @@ class ExpansionTests(unittest.TestCase):
         self.assertFalse(cdn_allowed(url.replace("test.pdf","%2e%2e/other.pdf"), "/hawkeyesports-prod/"))
 
     def test_unverified_school_is_not_enabled(self):
+        self.assertNotIn("northwestern", SOURCES)
         self.assertNotIn("virginia_tech", SOURCES)
 
     def test_virginia_tech_short_result(self):

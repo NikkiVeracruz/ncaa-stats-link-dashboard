@@ -1,4 +1,4 @@
-"""Limited production PDF discovery: explicitly configured women's basketball sources.
+"""Limited production PDF discovery: explicitly configured basketball sources.
 
 Uses the same bounded, robots-aware source as the successful read-only probe.
 Never modifies game identities, scores, archive membership, or existing reports.
@@ -10,6 +10,9 @@ import re
 import shutil
 import subprocess
 import sys
+import time
+import math
+from collections import Counter
 from datetime import date, datetime, timezone
 from pathlib import Path
 from urllib.error import HTTPError
@@ -17,24 +20,36 @@ from urllib.robotparser import RobotFileParser
 
 from link_enrichment import slot
 from tracker import directory, write_feed
+from university_source_registry import load_registry
 from university_link_acquisition_probe import (
     AGENT, BASE, SOURCE, candidates, get, download_link, get_pdf, pdf_identity, cdn_allowed,
 )
 
-SOURCE_NAME = "reviewed_links_plus_verified_wbb_pdf_sources"
+SOURCE_NAME = "reviewed_links_plus_verified_basketball_pdf_sources"
 STATE_KEY = "university_discovery"
-SOURCES = {
-    "vanderbilt": {"name": "Vanderbilt University", "pdf_name": "Vanderbilt", "host": "vucommodores.com", "path": "/sports/wbball/schedule", "prefix": "/vucommodores-prod/"},
-    "iowa": {"name": "University of Iowa", "pdf_name": "Iowa", "host": "hawkeyesports.com", "path": "/sports/wbball/schedule", "prefix": "/hawkeyesports-prod/"},
-    "miami_florida": {"name": "University of Miami", "pdf_name": "Miami (FL)", "host": "miamihurricanes.com", "path": "/sports/wbball/schedule", "prefix": "/miamihurricanes-com-prod/", "pdf_labels": ("box score (pdf)", "gamebook")},
-}
-MAX_SOURCES_PER_RUN = 3
+# Invalid configuration disables only optional discovery; CI validates strictly.
+try:
+    SOURCES = load_registry()
+except (OSError, ValueError, TypeError, KeyError) as exc:
+    SOURCES = {}
+    print("OPTIONAL UNIVERSITY REGISTRY UNAVAILABLE:", str(exc), file=sys.stderr, flush=True)
+
+MAX_SOURCES_PER_RUN = 5
+QUEUE_START_BUDGET_SECONDS = 120
+
+def sport_of(g):
+    sports = g.get("sports", [])
+    return sports[0] if len(sports) == 1 and sports[0] in ("WBB", "MBB") else None
+
+def source_for(g, side):
+    return SOURCES.get(g.get("school_keys", {}).get(side), {}).get(sport_of(g))
+
 
 
 def state_for(feed):
     state = feed.setdefault(STATE_KEY, {})
-    if not isinstance(state, dict) or not isinstance(state.setdefault("slots", {}), dict) or not isinstance(state.setdefault("blocked_sources", {}), dict):
-        state = {"blocked": True, "slots": {}, "blocked_sources": {}, "last_attempt": {"result": "invalid_optional_state"}}
+    if not isinstance(state, dict) or not isinstance(state.setdefault("slots", {}), dict) or not isinstance(state.setdefault("blocked_sources", {}), dict) or not isinstance(state.setdefault("school_attempts", {}), dict) or not isinstance(state.setdefault("game_attempts", {}), dict):
+        state = {"blocked": True, "slots": {}, "blocked_sources": {}, "school_attempts": {}, "game_attempts": {}, "last_attempt": {"result": "invalid_optional_state"}}
         feed[STATE_KEY] = state
         print("OPTIONAL UNIVERSITY SOURCE DISABLED: invalid saved state", file=sys.stderr, flush=True)
     return state
@@ -46,19 +61,23 @@ def eligible(feed, now):
         return []
     pool = {g["key"]: g for g in feed["current"] + feed["archive"]}
     result = []
+    def identity(g):
+        ids = g.get("team_ids", {})
+        if not all(ids.get(s) for s in ("home", "away")):
+            return None
+        return (g["date_et"], sport_of(g), tuple(sorted((ids["home"], ids["away"]))))
+    counts = Counter(identity(g) for g in pool.values())
     for g in pool.values():
-        if (not g.get("completed") or "WBB" not in g["sports"] or
+        if (not g.get("completed") or not sport_of(g) or
                 g["date_et"] < feed["archive_start"] or
                 any(r.get("kind") == "pdf_box_score" for r in g.get("reports", []))):
             continue
         sides = g.get("school_keys", {})
-        own = [s for s in ("home", "away") if sides.get(s) in SOURCES and sides[s] not in state["blocked_sources"]]
+        own = [s for s in ("home", "away") if source_for(g, s) and sides[s] not in state["blocked_sources"]]
         if not own or not all(g.get("team_ids", {}).get(s) for s in ("home", "away")):
             continue
         # A same-day repeat matchup is not safe to identify by schedule row.
-        if sum(h["date_et"] == g["date_et"] and "WBB" in h["sports"] and
-               set(h.get("team_ids", {}).values()) == set(g["team_ids"].values())
-               for h in pool.values()) != 1:
+        if counts[identity(g)] != 1:
             continue
         due = slot(g, now)
         if due is None:
@@ -73,13 +92,28 @@ def eligible(feed, now):
                 continue
             result.append((g, side, due))
             break
-    return sorted(result, key=lambda x: (x[0]["final_seen_at"], x[0]["key"]))
+    # Unserved/least recently served schools first; within each school favor
+    # unattempted games, then oldest attempt, then recently completed games.
+    def stamp(mapping, key):
+        value = mapping.get(key, -1)
+        return value if type(value) in (int, float) and math.isfinite(value) else -1
+    def priority(item):
+        g, side, _ = item
+        school = g["school_keys"][side]
+        key = g["key"] + "|" + school
+        return (stamp(state["school_attempts"], school),
+                stamp(state["game_attempts"], key),
+                -datetime.fromisoformat(g["final_seen_at"]).timestamp(), g["key"], school)
+    return sorted(result, key=priority)
 
 
 def acquire(g, own):
     if not shutil.which("pdftotext"):
         raise OSError("PDF verification dependency unavailable")
-    config = SOURCES[g["school_keys"][own]]
+    config = source_for(g, own)
+    if not config:
+        return None
+    sport = sport_of(g)
     base = "https://" + config["host"]
     source = base + config["path"]
     def school_get(url, media):
@@ -107,6 +141,7 @@ def acquire(g, own):
         school_get(source, "text/html"), aliases=aliases, include_labels=True, season=season,
         source=source, cdn_prefix=config["prefix"], heading_order=config.get("heading_order", "season_first"),
         short_result=config.get("short_result", False), pdf_labels=config.get("pdf_labels", ("box score (pdf)",)),
+        sport=sport, repeat_date=config.get("repeat_date", False), compact_date=config.get("compact_date", False),
         day=f"{day.strftime('%b')} {day.day}",
         result=f"{'Win' if own_score > other_score else 'Loss'} {own_score}-{other_score}",
     )
@@ -123,7 +158,7 @@ def acquire(g, own):
             return None
     pdf_text = get_pdf(pdf_url, config["prefix"])
     if not any(pdf_identity(pdf_text, opponent=label, day=f"{day.month}/{day.day}/{day.year % 100:02}",
-                            own_score=own_score, opponent_score=other_score, season=season, own_name=config["pdf_name"])
+                            own_score=own_score, opponent_score=other_score, season=season, own_name=config["pdf_name"], sport=sport)
                for label in links["opponent_labels"]):
         return None
     return {"kind": "pdf_box_score", "url": pdf_url, "school": config["name"],
@@ -131,7 +166,7 @@ def acquire(g, own):
             "source_url": source, "parent_url": parent}
 
 
-def enrich(feed, now, fetcher=acquire):
+def enrich(feed, now, fetcher=acquire, *, clock=time.monotonic):
     state = state_for(feed)
     feed["optional_discovery_source"] = SOURCE_NAME
     # Keep state only for the short eligibility window; links live in the archive.
@@ -139,17 +174,23 @@ def enrich(feed, now, fetcher=acquire):
     state["slots"] = {k: v for k, v in state["slots"].items()
                       if k.split("|", 1)[0] in pool and pool[k.split("|", 1)[0]].get("completed")
                       and slot(pool[k.split("|", 1)[0]], now) is not None}
+    state["school_attempts"] = {k:v for k,v in state["school_attempts"].items() if k in SOURCES}
+    state["game_attempts"] = {k:v for k,v in state["game_attempts"].items() if k in state["slots"]}
     due = eligible(feed, now)
+    started = clock()
     used = set()
     first_report = None
     for g, own, current_slot in due:
         school = g["school_keys"][own]
         if school in used or school in state["blocked_sources"]:
             continue
-        if len(used) >= MAX_SOURCES_PER_RUN:
+        if len(used) >= MAX_SOURCES_PER_RUN or clock() - started >= QUEUE_START_BUDGET_SECONDS:
             break
         used.add(school)
-        state["slots"][g["key"] + "|" + school] = list(current_slot)
+        key = g["key"] + "|" + school
+        state["slots"][key] = list(current_slot)
+        state["school_attempts"][school] = now.timestamp()
+        state["game_attempts"][key] = now.timestamp()
         state["last_attempt"] = {"key": g["key"], "school": school, "at": now.isoformat()}
         try:
             report = fetcher(g, own)
@@ -170,6 +211,8 @@ def enrich(feed, now, fetcher=acquire):
         print("OPTIONAL UNIVERSITY PDF VERIFIED:", json.dumps({"key": g["key"], "school": school, "url": report["url"]}), flush=True)
         if first_report is None:
             first_report = report
+    state["queue"] = {"eligible_games": len(due), "attempted_schools": len(used), "deferred_games": len(due) - len(used)}
+    print("OPTIONAL UNIVERSITY QUEUE:", json.dumps(state["queue"]), flush=True)
     return first_report
 
 

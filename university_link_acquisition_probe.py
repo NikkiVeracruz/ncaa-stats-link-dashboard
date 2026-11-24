@@ -4,7 +4,10 @@ No production integration, no player data, no stored source HTML, no guessed
 report URLs. A robots denial, redirect, failed fetch or ambiguous row stops the
 probe. Results are candidates, not verified reports.
 """
+import gzip
+import io
 import json
+import zlib
 import re
 import subprocess
 from urllib.error import HTTPError
@@ -35,6 +38,26 @@ def allowed(url, host=HOST):
         return False
 
 
+def read_body(response, limit):
+    """Bound both wire bytes and decoded bytes; accept only identity or gzip."""
+    raw = response.read(limit + 1)
+    if len(raw) > limit:
+        raise ValueError("Source exceeds wire size limit")
+    encoding = response.headers.get("Content-Encoding", "").strip().lower()
+    if encoding in ("", "identity") and not raw.startswith(b"\x1f\x8b"):
+        return raw
+    if encoding not in ("", "identity", "gzip", "x-gzip"):
+        raise ValueError("Unsupported content encoding")
+    try:
+        with gzip.GzipFile(fileobj=io.BytesIO(raw)) as stream:
+            data = stream.read(limit + 1)
+    except (OSError, EOFError, zlib.error) as exc:
+        raise ValueError("Invalid gzip response") from exc
+    if len(data) > limit:
+        raise ValueError("Source exceeds decoded size limit")
+    return data
+
+
 def get(url, content_type, *, host=HOST):
     if not allowed(url, host):
         raise ValueError("Unexpected source host")
@@ -43,9 +66,7 @@ def get(url, content_type, *, host=HOST):
     ) as response:
         if response.status != 200 or response.headers.get_content_type() != content_type:
             raise ValueError("Unexpected source status or content type")
-        data = response.read(LIMIT + 1)
-    if len(data) > LIMIT:
-        raise ValueError("Source exceeds size limit")
+        data = read_body(response, LIMIT)
     return data.decode("utf-8", errors="strict")
 
 
@@ -88,13 +109,16 @@ def normalized(text):
     return " ".join(text.lower().split())
 
 
-def candidates(html, *, opponent="Arizona", day="Nov 23", result="Win 93-62", season="2026-27", aliases=None, include_labels=False, source=SOURCE, cdn_prefix=None, heading_order="season_first", short_result=False, pdf_labels=("box score (pdf)",)):
+def candidates(html, *, opponent="Arizona", day="Nov 23", result="Win 93-62", season="2026-27", aliases=None, include_labels=False, source=SOURCE, cdn_prefix=None, heading_order="season_first", short_result=False, pdf_labels=("box score (pdf)",), sport="WBB", repeat_date=False, compact_date=False):
     from university_probe import norm
+    sport_name = {"WBB": "women\u0027s basketball", "MBB": "men\u0027s basketball"}.get(sport)
+    if not sport_name:
+        return {}
     wanted = set(aliases or (norm(opponent),))
     tree = Tree()
     tree.feed(html)
     if not any(n.tag in ("h1", "h2") and
-               ((season + " women's basketball schedule").lower() if heading_order == "season_first" else ("women's basketball " + season + " schedule").lower()) in normalized(n.text())
+               ((season + " " + sport_name + " schedule").lower() if heading_order == "season_first" else (sport_name + " " + season + " schedule").lower()) in normalized(n.text())
                for n in tree.root.walk()):
         return {}
     # A link must be contained in a single row matching opponent, date and
@@ -113,7 +137,11 @@ def candidates(html, *, opponent="Arizona", day="Nov 23", result="Win 93-62", se
                     labels.add(candidate)
         if not labels:
             continue
-        if not re.search(r"\b" + re.escape(day.lower()) + r"\b", text):
+        month, number = day.lower().split(" ")
+        date_pattern = r"(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)" + (r"\s*" if compact_date else r"\s+") + r"\d{1,2}\b"
+        date_matches = re.findall(date_pattern, text)
+        expected_date = month + number
+        if not date_matches or any(re.sub(r"\s+", "", d) != expected_date for d in date_matches):
             continue
         result_text = result.lower()
         if short_result:
@@ -121,7 +149,7 @@ def candidates(html, *, opponent="Arizona", day="Nov 23", result="Win 93-62", se
         if not re.search(r"\b" + re.escape(result_text) + r"\b", text):
             continue
         # Reject wrappers containing multiple schedule dates or results.
-        if len(re.findall(r"\b(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\s+\d{1,2}\b", text)) != 1:
+        if not repeat_date and len(date_matches) != 1:
             continue
         if len(re.findall(r"\b(?:w|l)\s+\d+\s*-\s*\d+\b" if short_result else r"\b(?:win|loss)\s+\d+\s*-\s*\d+\b", text)) != 1:
             continue
@@ -129,7 +157,7 @@ def candidates(html, *, opponent="Arizona", day="Nov 23", result="Win 93-62", se
         for a in n.walk():
             if a.tag != "a":
                 continue
-            label = normalized(a.text()).replace(" opens in a new window", "").strip()
+            label = normalized(a.text()).removeprefix("opens in a new window ").removesuffix(" opens in a new window").strip()
             url = urljoin(source, a.attrs.get("href", ""))
             same_host = allowed(url, urlsplit(source).hostname)
             direct_pdf = bool(cdn_prefix and cdn_allowed(url, cdn_prefix))
@@ -179,10 +207,13 @@ def download_link(html, parent, prefix=CDN_PREFIX):
     return next(iter(links)) if len(links) == 1 else None
 
 
-def pdf_identity(text, *, opponent, day, own_score, opponent_score, season, own_name="Vanderbilt"):
+def pdf_identity(text, *, opponent, day, own_score, opponent_score, season, own_name="Vanderbilt", sport="WBB"):
     # Require exact labeled teams/scores, date, final report marker and sport.
     text = normalized(text)
-    required = ("official basketball box score - final", season.lower() + " women's basketball")
+    sport_name = {"WBB": "women\u0027s basketball", "MBB": "men\u0027s basketball"}.get(sport)
+    if not sport_name:
+        return False
+    required = ("official basketball box score - final", season.lower() + " " + sport_name)
     if not all(x in text for x in required):
         return False
     if not re.search(r"\b" + re.escape(day) + r"\b", text):
@@ -202,8 +233,7 @@ def get_pdf(url, prefix=CDN_PREFIX):
         with opener.open(Request(CDN + "/robots.txt", headers={"User-Agent": AGENT}), timeout=15) as response:
             if response.status != 200 or response.headers.get_content_type() != "text/plain":
                 raise ValueError("Unexpected CDN robots response")
-            raw = response.read(100_001)
-            if len(raw) > 100_000: raise ValueError("CDN robots exceeds limit")
+            raw = read_body(response, 100_000)
             rules = RobotFileParser(); rules.parse(raw.decode("utf-8").splitlines())
             if not rules.can_fetch(AGENT, url): raise ValueError("CDN robots disallows PDF request")
     except HTTPError as exc:
@@ -211,7 +241,7 @@ def get_pdf(url, prefix=CDN_PREFIX):
     with opener.open(Request(url, headers={"User-Agent": AGENT, "Accept": "application/pdf"}), timeout=15) as response:
         if response.status != 200 or response.headers.get_content_type() != "application/pdf":
             raise ValueError("PDF destination is not application/pdf")
-        data = response.read(8_000_001)
+        data = read_body(response, 8_000_000)
     if len(data) > 8_000_000 or not data.startswith(b"%PDF-"):
         raise ValueError("Invalid or oversized PDF")
     result = subprocess.run(["pdftotext", "-f", "1", "-l", "1", "-", "-"], input=data,
