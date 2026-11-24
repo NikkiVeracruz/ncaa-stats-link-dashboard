@@ -9,6 +9,7 @@ import json
 import re
 import shutil
 import subprocess
+import sys
 from datetime import date, datetime, timezone
 from pathlib import Path
 from urllib.error import HTTPError
@@ -27,7 +28,9 @@ STATE_KEY = "university_discovery"
 def state_for(feed):
     state = feed.setdefault(STATE_KEY, {})
     if not isinstance(state, dict) or not isinstance(state.setdefault("slots", {}), dict):
-        raise ValueError("Invalid optional source state")
+        state = {"blocked": True, "slots": {}, "last_attempt": {"result": "invalid_optional_state"}}
+        feed[STATE_KEY] = state
+        print("OPTIONAL UNIVERSITY SOURCE DISABLED: invalid saved state", file=sys.stderr, flush=True)
     return state
 
 
