@@ -88,21 +88,30 @@ def normalized(text):
     return " ".join(text.lower().split())
 
 
-def candidates(html, *, opponent="Arizona", day="Nov 23", result="Win 93-62"):
+def candidates(html, *, opponent="Arizona", day="Nov 23", result="Win 93-62", season="2026-27", aliases=None, include_labels=False):
+    from university_probe import norm
+    wanted = set(aliases or (norm(opponent),))
     tree = Tree()
     tree.feed(html)
     if not any(n.tag in ("h1", "h2") and
-               "2026-27 women's basketball schedule" in normalized(n.text())
+               (season + " women's basketball schedule").lower() in normalized(n.text())
                for n in tree.root.walk()):
         return {}
     # A link must be contained in a single row matching opponent, date and
     # score, not in an unrelated schedule or page-wide ancestor.
     matches = []
+    matched_labels = set()
     for n in tree.root.walk():
         if n.tag not in ("article", "div", "li", "tr", "section"):
             continue
         text = normalized(n.text())
-        if not any(normalized(x.text()) in (opponent.lower(), "vs." + opponent.lower(), "vs. " + opponent.lower(), "at" + opponent.lower(), "at " + opponent.lower()) for x in n.walk()):
+        labels = set()
+        for x in n.walk():
+            label = normalized(x.text())
+            for candidate in (label, re.sub(r"^(?:vs\.\s*|at\s*)", "", label)):
+                if norm(candidate) in wanted and candidate:
+                    labels.add(candidate)
+        if not labels:
             continue
         if not re.search(r"\b" + re.escape(day.lower()) + r"\b", text):
             continue
@@ -128,13 +137,17 @@ def candidates(html, *, opponent="Arizona", day="Nov 23", result="Win 93-62"):
                 links.setdefault("pdf_candidate", set()).add(url)
         if links:
             matches.append(links)
+            matched_labels.update(labels)
     merged = {}
     for row in matches:
         for kind, urls in row.items():
             merged.setdefault(kind, set()).update(urls)
     if any(len(urls) != 1 for urls in merged.values()):
         return {}
-    return {kind: next(iter(urls)) for kind, urls in merged.items()}
+    result = {kind: next(iter(urls)) for kind, urls in merged.items()}
+    if include_labels and result:
+        result["opponent_labels"] = sorted(matched_labels)
+    return result
 
 
 
