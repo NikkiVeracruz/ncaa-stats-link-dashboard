@@ -9,13 +9,13 @@ from university_link_acquisition_probe import candidates, pdf_identity, cdn_allo
 from university_expansion_control import fixture, NOW
 
 class ExpansionTests(unittest.TestCase):
-    def test_three_distinct_sources_and_both_views(self):
+    def test_two_distinct_sources_and_both_views(self):
         feed = fixture()
         before = copy.deepcopy(feed["archive"])
         def verified(g, side):
             return {"kind":"pdf_box_score", "url":"https://storage.googleapis.com" + SOURCES[g["school_keys"][side]]["prefix"] + "test.pdf", "side":side}
         enrich(feed, NOW, verified)
-        self.assertEqual(len([g for g in feed["archive"] if g["reports"]]), 3)
+        self.assertEqual(len([g for g in feed["archive"] if g["reports"]]), 2)
         self.assertEqual(feed["archive"], feed["current"])
         for a,b in zip(feed["archive"],before):
             self.assertEqual({k:v for k,v in a.items() if k!="reports"}, {k:v for k,v in b.items() if k!="reports"})
@@ -48,6 +48,9 @@ class ExpansionTests(unittest.TestCase):
         self.assertFalse(candidates(html.replace("hawkeyesports-prod","other-bucket"), **kw))
         self.assertFalse(cdn_allowed(url.replace("test.pdf","../other.pdf"), "/hawkeyesports-prod/"))
         self.assertFalse(cdn_allowed(url.replace("test.pdf","%2e%2e/other.pdf"), "/hawkeyesports-prod/"))
+
+    def test_unverified_school_is_not_enabled(self):
+        self.assertNotIn("virginia_tech", SOURCES)
 
     def test_virginia_tech_short_result(self):
         html = "<h1>Women's Basketball 2026-27 Schedule</h1><div><span>Nov 23</span><span>UT Martin</span><span>W 85-41</span><a href='/documents/control.pdf'>Box Score (PDF)</a></div>"
