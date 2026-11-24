@@ -1,0 +1,702 @@
+{
+  "read_only": true,
+  "validation_run": 45425898284,
+  "results": [
+    {
+      "school": "arizona_state",
+      "sport": "MBB",
+      "source": "https://thesundevils.com/sports/mens-basketball/schedule",
+      "control_count": 1,
+      "status": "no_matching_pdf_link"
+    },
+    {
+      "school": "arizona_state",
+      "sport": "WBB",
+      "source": "https://thesundevils.com/sports/womens-basketball/schedule",
+      "control_count": 1,
+      "status": "no_matching_pdf_link"
+    },
+    {
+      "school": "auburn",
+      "sport": "MBB",
+      "source": "https://auburntigers.com/sports/mens-basketball/schedule",
+      "control_count": 2,
+      "status": "verified",
+      "control": "mbb:401920519",
+      "parent": "https://auburntigers.com/documents/d4640faa-4249-4e12-9fee-1ef67b9464ea.pdf",
+      "pdf": "https://storage.googleapis.com/auburn-prod/2026/11/23/YwpYXc1BZRIVBbHdqVjlOSMvP1ZeDWpI6GogAACm.pdf",
+      "prefix": "/auburn-prod/",
+      "config": {
+        "pdf_name": "Auburn",
+        "path": "/sports/mens-basketball/schedule",
+        "control": "mbb:401920519",
+        "heading_order": "season_first",
+        "short_result": false,
+        "repeat_date": false,
+        "compact_date": false,
+        "pdf_labels": [
+          "box score (pdf)",
+          "box score (.pdf)",
+          "gamebook",
+          "box score pdf",
+          "pdf box score"
+        ]
+      },
+      "game": {
+        "key": "mbb:401920519",
+        "sports": [
+          "MBB"
+        ],
+        "date_et": "2026-11-19",
+        "completed": true,
+        "school_keys": {
+          "home": "auburn",
+          "away": "notre_dame"
+        },
+        "team_ids": {
+          "home": "2",
+          "away": "87"
+        },
+        "team_names": {
+          "home": [
+            "auburn",
+            "auburntigers"
+          ],
+          "away": [
+            "notredame",
+            "notredamefightingirish"
+          ]
+        },
+        "home_score": 73,
+        "away_score": 78
+      },
+      "side": "home"
+    },
+    {
+      "school": "auburn",
+      "sport": "WBB",
+      "source": "https://auburntigers.com/sports/womens-basketball/schedule",
+      "control_count": 1,
+      "status": "no_matching_pdf_link"
+    },
+    {
+      "school": "byu",
+      "sport": "MBB",
+      "source": "https://byucougars.com/sports/mens-basketball/schedule",
+      "control_count": 2,
+      "status": "unsupported_schedule_heading"
+    },
+    {
+      "school": "byu",
+      "sport": "WBB",
+      "source": "https://byucougars.com/sports/womens-basketball/schedule",
+      "control_count": 2,
+      "status": "unsupported_schedule_heading"
+    },
+    {
+      "school": "cincinnati",
+      "sport": "MBB",
+      "source": "https://gobearcats.com/sports/mens-basketball/schedule",
+      "control_count": 1,
+      "status": "pdf_identity_not_verified",
+      "control": "mbb:401920751",
+      "parent": "https://gobearcats.com/documents/ba5cbe22-fbde-4c8d-9d23-c19cec46464a.pdf"
+    },
+    {
+      "school": "cincinnati",
+      "sport": "WBB",
+      "source": "https://gobearcats.com/sports/womens-basketball/schedule",
+      "control_count": 2,
+      "status": "verified",
+      "control": "wbb:401916189",
+      "parent": "https://gobearcats.com/documents/94d278a7-e668-4950-8e5b-abb63c44fe65.pdf",
+      "pdf": "https://storage.googleapis.com/gobearcats-com-prod/2026/11/22/uPbg7u6ArBRK132VbpehPu0CCcbplthd7PSfiY7u.pdf",
+      "prefix": "/gobearcats-com-prod/",
+      "config": {
+        "pdf_name": "Cincinnati",
+        "path": "/sports/womens-basketball/schedule",
+        "control": "wbb:401916189",
+        "heading_order": "season_first",
+        "short_result": false,
+        "repeat_date": false,
+        "compact_date": false,
+        "pdf_labels": [
+          "box score (pdf)",
+          "box score (.pdf)",
+          "gamebook",
+          "box score pdf",
+          "pdf box score"
+        ]
+      },
+      "game": {
+        "key": "wbb:401916189",
+        "sports": [
+          "WBB"
+        ],
+        "date_et": "2026-11-21",
+        "completed": true,
+        "school_keys": {
+          "home": "nevada_las_vegas",
+          "away": "cincinnati"
+        },
+        "team_ids": {
+          "home": "2439",
+          "away": "2132"
+        },
+        "team_names": {
+          "home": [
+            "unlv",
+            "unlvladyrebels"
+          ],
+          "away": [
+            "cincinnati",
+            "cincinnatibearcats"
+          ]
+        },
+        "home_score": 85,
+        "away_score": 58
+      },
+      "side": "away"
+    },
+    {
+      "school": "clemson",
+      "sport": "MBB",
+      "source": "https://clemsontigers.com/sports/mens-basketball/schedule",
+      "control_count": 1,
+      "status": "source_stopped",
+      "reason": "HTTP Error 404: Not Found"
+    },
+    {
+      "school": "clemson",
+      "sport": "WBB",
+      "source": "https://clemsontigers.com/sports/womens-basketball/schedule",
+      "control_count": 1,
+      "status": "source_unavailable",
+      "reason": "HTTP Error 404: Not Found"
+    },
+    {
+      "school": "georgia_institute_of_technology",
+      "sport": "MBB",
+      "source": "https://ramblinwreck.com/sports/m-baskbl/schedule",
+      "control_count": 1,
+      "status": "no_matching_pdf_link"
+    },
+    {
+      "school": "georgia_institute_of_technology",
+      "sport": "WBB",
+      "source": "https://ramblinwreck.com/sports/w-baskbl/schedule",
+      "control_count": 2,
+      "status": "pdf_identity_not_verified",
+      "control": "wbb:401913718",
+      "parent": "https://ramblinwreck.com/documents/6deb1fe7-1ee4-4767-bf2c-e3f9e821fdf7.pdf"
+    },
+    {
+      "school": "missouri",
+      "sport": "MBB",
+      "source": "https://mutigers.com/sports/mens-basketball/schedule",
+      "control_count": 2,
+      "status": "verified",
+      "control": "mbb:401919784",
+      "parent": "https://mutigers.com/documents/fdab3320-329c-4b7a-b21a-2627547d49d1.pdf",
+      "pdf": "https://storage.googleapis.com/mutigers-com-prod/2026/11/21/lzBs7vYyg3DyVJ1JJMxfmuP3eHAEJxeI8lhnR287.pdf",
+      "prefix": "/mutigers-com-prod/",
+      "config": {
+        "pdf_name": "Missouri",
+        "path": "/sports/mens-basketball/schedule",
+        "control": "mbb:401919784",
+        "heading_order": "season_first",
+        "short_result": false,
+        "repeat_date": false,
+        "compact_date": false,
+        "pdf_labels": [
+          "box score (pdf)",
+          "box score (.pdf)",
+          "gamebook",
+          "box score pdf",
+          "pdf box score"
+        ]
+      },
+      "game": {
+        "key": "mbb:401919784",
+        "sports": [
+          "MBB"
+        ],
+        "date_et": "2026-11-20",
+        "completed": true,
+        "school_keys": {
+          "home": "missouri",
+          "away": "le_moyne"
+        },
+        "team_ids": {
+          "home": "142",
+          "away": "2330"
+        },
+        "team_names": {
+          "home": [
+            "missouri",
+            "missouritigers"
+          ],
+          "away": [
+            "lemoyne",
+            "lemoynedolphins"
+          ]
+        },
+        "home_score": 91,
+        "away_score": 64
+      },
+      "side": "home"
+    },
+    {
+      "school": "missouri",
+      "sport": "WBB",
+      "source": "https://mutigers.com/sports/womens-basketball/schedule",
+      "control_count": 1,
+      "status": "no_matching_pdf_link"
+    },
+    {
+      "school": "nebraska",
+      "sport": "MBB",
+      "source": "https://huskers.com/sports/mens-basketball/schedule",
+      "control_count": 2,
+      "status": "pdf_identity_not_verified",
+      "control": "mbb:401926064",
+      "parent": "https://storage.googleapis.com/huskers-com-prod/2026/11/19/sknHnANJa0JRUsEjyQdXGgHLUyyug84mDS9FF6Re.pdf"
+    },
+    {
+      "school": "nebraska",
+      "sport": "WBB",
+      "source": "https://huskers.com/sports/womens-basketball/schedule",
+      "control_count": 1,
+      "status": "no_matching_pdf_link"
+    },
+    {
+      "school": "new_mexico",
+      "sport": "MBB",
+      "source": "https://golobos.com/sports/mbball/schedule",
+      "control_count": 1,
+      "status": "no_matching_pdf_link"
+    },
+    {
+      "school": "new_mexico",
+      "sport": "WBB",
+      "source": "https://golobos.com/sports/wbball/schedule",
+      "control_count": 2,
+      "status": "no_matching_pdf_link"
+    },
+    {
+      "school": "northwestern",
+      "sport": "MBB",
+      "source": "https://nusports.com/sports/mens-basketball/schedule",
+      "control_count": 2,
+      "status": "no_matching_pdf_link"
+    },
+    {
+      "school": "northwestern",
+      "sport": "WBB",
+      "source": "https://nusports.com/sports/womens-basketball/schedule",
+      "control_count": 3,
+      "status": "no_matching_pdf_link"
+    },
+    {
+      "school": "notre_dame",
+      "sport": "MBB",
+      "source": "https://fightingirish.com/sports/mbball/schedule",
+      "control_count": 2,
+      "status": "unsupported_schedule_heading"
+    },
+    {
+      "school": "notre_dame",
+      "sport": "WBB",
+      "source": "https://fightingirish.com/sports/wbball/schedule",
+      "control_count": 0,
+      "status": "no_unambiguous_recent_final"
+    },
+    {
+      "school": "old_dominion",
+      "sport": "MBB",
+      "source": "https://odusports.com/sports/mens-basketball/schedule",
+      "control_count": 0,
+      "status": "no_unambiguous_recent_final"
+    },
+    {
+      "school": "old_dominion",
+      "sport": "WBB",
+      "source": "https://odusports.com/sports/womens-basketball/schedule",
+      "control_count": 2,
+      "status": "no_matching_pdf_link"
+    },
+    {
+      "school": "penn_state",
+      "sport": "MBB",
+      "source": "https://gopsusports.com/sports/mens-basketball/schedule",
+      "control_count": 1,
+      "status": "no_matching_pdf_link"
+    },
+    {
+      "school": "penn_state",
+      "sport": "WBB",
+      "source": "https://gopsusports.com/sports/womens-basketball/schedule",
+      "control_count": 2,
+      "status": "pdf_identity_not_verified",
+      "control": "wbb:401921242",
+      "parent": "https://storage.googleapis.com/gopsusports-prod/2026/11/22/0g46uh1pI2EUYrAy0reCdT1tltyX84SoIYna0rgO.pdf"
+    },
+    {
+      "school": "purdue",
+      "sport": "MBB",
+      "source": "https://purduesports.com/sports/mens-basketball/schedule",
+      "control_count": 1,
+      "status": "verified",
+      "control": "mbb:401926134",
+      "parent": "https://purduesports.com/documents/babd9add-bf65-4ec8-ac13-14d3163718dd.pdf",
+      "pdf": "https://storage.googleapis.com/purduesports-com-prod/2026/11/21/ASReYMdthdKkB50dc41N20Q65exfEenCN0mnPyBZ.pdf",
+      "prefix": "/purduesports-com-prod/",
+      "config": {
+        "pdf_name": "Purdue",
+        "path": "/sports/mens-basketball/schedule",
+        "control": "mbb:401926134",
+        "heading_order": "season_first",
+        "short_result": false,
+        "repeat_date": false,
+        "compact_date": false,
+        "pdf_labels": [
+          "box score (pdf)",
+          "box score (.pdf)",
+          "gamebook",
+          "box score pdf",
+          "pdf box score"
+        ]
+      },
+      "game": {
+        "key": "mbb:401926134",
+        "sports": [
+          "MBB"
+        ],
+        "date_et": "2026-11-20",
+        "completed": true,
+        "school_keys": {
+          "home": "purdue",
+          "away": "oakland"
+        },
+        "team_ids": {
+          "home": "2509",
+          "away": "2473"
+        },
+        "team_names": {
+          "home": [
+            "purdue",
+            "purdueboilermakers"
+          ],
+          "away": [
+            "oakland",
+            "oaklandgoldengrizzlies"
+          ]
+        },
+        "home_score": 95,
+        "away_score": 49
+      },
+      "side": "home"
+    },
+    {
+      "school": "purdue",
+      "sport": "WBB",
+      "source": "https://purduesports.com/sports/womens-basketball/schedule",
+      "control_count": 2,
+      "status": "verified",
+      "control": "wbb:401918944",
+      "parent": "https://purduesports.com/documents/24deb6a4-0910-487f-ba2d-58f8954c491a.pdf",
+      "pdf": "https://storage.googleapis.com/purduesports-com-prod/2026/11/21/D1YPyCoIxZxGtrLiPvbUTyxs5PEEXWj1DooAMjBG.pdf",
+      "prefix": "/purduesports-com-prod/",
+      "config": {
+        "pdf_name": "Purdue",
+        "path": "/sports/womens-basketball/schedule",
+        "control": "wbb:401918944",
+        "heading_order": "season_first",
+        "short_result": false,
+        "repeat_date": false,
+        "compact_date": false,
+        "pdf_labels": [
+          "box score (pdf)",
+          "box score (.pdf)",
+          "gamebook",
+          "box score pdf",
+          "pdf box score"
+        ]
+      },
+      "game": {
+        "key": "wbb:401918944",
+        "sports": [
+          "WBB"
+        ],
+        "date_et": "2026-11-21",
+        "completed": true,
+        "school_keys": {
+          "home": "texas_tech",
+          "away": "purdue"
+        },
+        "team_ids": {
+          "home": "2641",
+          "away": "2509"
+        },
+        "team_names": {
+          "home": [
+            "texastech",
+            "texastechladyraiders"
+          ],
+          "away": [
+            "purdue",
+            "purdueboilermakers"
+          ]
+        },
+        "home_score": 58,
+        "away_score": 57
+      },
+      "side": "away"
+    },
+    {
+      "school": "san_diego_state",
+      "sport": "MBB",
+      "source": "https://goaztecs.com/sports/mens-basketball/schedule",
+      "control_count": 1,
+      "status": "no_matching_pdf_link"
+    },
+    {
+      "school": "san_diego_state",
+      "sport": "WBB",
+      "source": "https://goaztecs.com/sports/womens-basketball/schedule",
+      "control_count": 2,
+      "status": "verified",
+      "control": "wbb:401909674",
+      "parent": "https://storage.googleapis.com/sdsu-prod/2026/11/23/wj0277lIF1BBBVPCKuWcORwqAIXiTFQwjCEBAG8N.pdf",
+      "pdf": "https://storage.googleapis.com/sdsu-prod/2026/11/23/wj0277lIF1BBBVPCKuWcORwqAIXiTFQwjCEBAG8N.pdf",
+      "prefix": "/sdsu-prod/",
+      "config": {
+        "pdf_name": "San Diego State",
+        "path": "/sports/womens-basketball/schedule",
+        "control": "wbb:401909674",
+        "heading_order": "season_first",
+        "short_result": true,
+        "repeat_date": false,
+        "compact_date": false,
+        "pdf_labels": [
+          "box score (pdf)",
+          "box score (.pdf)",
+          "gamebook",
+          "box score pdf",
+          "pdf box score"
+        ]
+      },
+      "game": {
+        "key": "wbb:401909674",
+        "sports": [
+          "WBB"
+        ],
+        "date_et": "2026-11-22",
+        "completed": true,
+        "school_keys": {
+          "home": "san_diego_state",
+          "away": "winthrop"
+        },
+        "team_ids": {
+          "home": "21",
+          "away": "2737"
+        },
+        "team_names": {
+          "home": [
+            "sandiegost",
+            "sandiegostate",
+            "sandiegostateaztecs"
+          ],
+          "away": [
+            "winthrop",
+            "winthropeagles"
+          ]
+        },
+        "home_score": 63,
+        "away_score": 57
+      },
+      "side": "home"
+    },
+    {
+      "school": "seattle",
+      "sport": "MBB",
+      "source": "https://goseattleu.com/sports/mens-basketball/schedule",
+      "control_count": 2,
+      "status": "no_matching_pdf_link"
+    },
+    {
+      "school": "seattle",
+      "sport": "WBB",
+      "source": "https://goseattleu.com/sports/womens-basketball/schedule",
+      "control_count": 3,
+      "status": "no_matching_pdf_link"
+    },
+    {
+      "school": "stanford",
+      "sport": "MBB",
+      "source": "https://gostanford.com/sports/mens-basketball/schedule",
+      "control_count": 0,
+      "status": "no_unambiguous_recent_final"
+    },
+    {
+      "school": "stanford",
+      "sport": "WBB",
+      "source": "https://gostanford.com/sports/womens-basketball/schedule",
+      "control_count": 2,
+      "status": "verified",
+      "control": "wbb:401915983",
+      "parent": "https://gostanford.com/documents/64b91e2b-6dcb-41c2-8c6a-89c9f26f5d8d.pdf",
+      "pdf": "https://storage.googleapis.com/stanford-prod/2026/11/23/3qNUzi6tfHer7hD6UwuVvAMzItR7rUGXDC8TC7jG.pdf",
+      "prefix": "/stanford-prod/",
+      "config": {
+        "pdf_name": "Stanford",
+        "path": "/sports/womens-basketball/schedule",
+        "control": "wbb:401915983",
+        "heading_order": "season_first",
+        "short_result": false,
+        "repeat_date": false,
+        "compact_date": false,
+        "pdf_labels": [
+          "box score (pdf)",
+          "box score (.pdf)",
+          "gamebook",
+          "box score pdf",
+          "pdf box score"
+        ]
+      },
+      "game": {
+        "key": "wbb:401915983",
+        "sports": [
+          "WBB"
+        ],
+        "date_et": "2026-11-22",
+        "completed": true,
+        "school_keys": {
+          "home": "portland",
+          "away": "stanford"
+        },
+        "team_ids": {
+          "home": "2501",
+          "away": "24"
+        },
+        "team_names": {
+          "home": [
+            "portland",
+            "portlandpilots"
+          ],
+          "away": [
+            "stanford",
+            "stanfordcardinal"
+          ]
+        },
+        "home_score": 73,
+        "away_score": 62
+      },
+      "side": "away"
+    },
+    {
+      "school": "texas_am",
+      "sport": "MBB",
+      "source": "https://12thman.com/sports/mens-basketball/schedule",
+      "control_count": 1,
+      "status": "no_matching_pdf_link"
+    },
+    {
+      "school": "texas_am",
+      "sport": "WBB",
+      "source": "https://12thman.com/sports/womens-basketball/schedule",
+      "control_count": 2,
+      "status": "no_matching_pdf_link"
+    },
+    {
+      "school": "texas_san_antonio",
+      "sport": "MBB",
+      "source": "https://goutsa.com/sports/mens-basketball/schedule",
+      "control_count": 2,
+      "status": "no_matching_pdf_link"
+    },
+    {
+      "school": "texas_san_antonio",
+      "sport": "WBB",
+      "source": "https://goutsa.com/sports/womens-basketball/schedule",
+      "control_count": 1,
+      "status": "unsupported_schedule_heading"
+    },
+    {
+      "school": "ucf",
+      "sport": "MBB",
+      "source": "https://ucfknights.com/sports/mens-basketball/schedule",
+      "control_count": 1,
+      "status": "no_matching_pdf_link"
+    },
+    {
+      "school": "ucf",
+      "sport": "WBB",
+      "source": "https://ucfknights.com/sports/womens-basketball/schedule",
+      "control_count": 2,
+      "status": "no_matching_pdf_link"
+    },
+    {
+      "school": "ucla",
+      "sport": "MBB",
+      "source": "https://uclabruins.com/sports/mens-basketball/schedule",
+      "control_count": 2,
+      "status": "pdf_identity_not_verified",
+      "control": "mbb:401920905",
+      "parent": "https://uclabruins.com/documents/27e5f66f-6f4a-4908-9fec-491ef0b66f68.pdf"
+    },
+    {
+      "school": "ucla",
+      "sport": "WBB",
+      "source": "https://uclabruins.com/sports/womens-basketball/schedule",
+      "control_count": 2,
+      "status": "no_matching_pdf_link"
+    },
+    {
+      "school": "virginia",
+      "sport": "MBB",
+      "source": "https://virginiasports.com/sports/mbball/schedule",
+      "control_count": 0,
+      "status": "no_unambiguous_recent_final"
+    },
+    {
+      "school": "virginia",
+      "sport": "WBB",
+      "source": "https://virginiasports.com/sports/wbball/schedule",
+      "control_count": 2,
+      "status": "no_matching_pdf_link"
+    },
+    {
+      "school": "virginia_tech",
+      "sport": "MBB",
+      "source": "https://hokiesports.com/sports/mens-basketball/schedule",
+      "control_count": 2,
+      "status": "no_matching_pdf_link"
+    },
+    {
+      "school": "virginia_tech",
+      "sport": "WBB",
+      "source": "https://hokiesports.com/sports/womens-basketball/schedule",
+      "control_count": 1,
+      "status": "pdf_identity_not_verified",
+      "control": "wbb:401916019",
+      "parent": "https://hokiesports.com/documents/31dde63f-805e-4c75-b493-cdcddb358b46.pdf"
+    },
+    {
+      "school": "washington_state",
+      "sport": "MBB",
+      "source": "https://wsucougars.com/sports/mens-basketball/schedule",
+      "control_count": 2,
+      "status": "pdf_identity_not_verified",
+      "control": "mbb:401909567",
+      "parent": "https://wsucougars.com/documents/a101fefc-44d5-43f0-881a-8ae1906da118.pdf"
+    },
+    {
+      "school": "washington_state",
+      "sport": "WBB",
+      "source": "https://wsucougars.com/sports/womens-basketball/schedule",
+      "control_count": 0,
+      "status": "no_unambiguous_recent_final"
+    }
+  ]
+}
