@@ -1,7 +1,8 @@
 import json, tempfile, unittest
-from datetime import date,datetime,timezone
+from datetime import date,datetime,timezone,timedelta
 from pathlib import Path
-from tracker import directory,from_event,merge_game,make_feed,school_link,write_feed,collect
+from link_enrichment import slot,apply_links
+from tracker import directory,from_event,merge_game,make_feed,school_link,write_feed,collect,display_day,window_days,requested_days,day_ranges
 D=date(2026,11,23)
 def event(state="post",status="STATUS_FINAL",completed=True,score=31):
     return {"id":"123","date":"2026-11-23T18:00:00Z","status":{"type":{"state":state,"name":status,"completed":completed},"displayClock":"5:13","period":2},"competitions":[{"neutralSite":False,"competitors":[{"homeAway":"home","team":{"id":"1","displayName":"Nebraska Cornhuskers","location":"Nebraska"},"score":str(score)},{"homeAway":"away","team":{"id":"2","displayName":"Ohio State Buckeyes","location":"Ohio State"},"score":"28"}]}]}
@@ -38,3 +39,55 @@ class TrackerTests(unittest.TestCase):
     def test_atomic(self):
         with tempfile.TemporaryDirectory() as d:
             p=Path(d)/"feed.json";write_feed(p,{"archive":[]});self.assertEqual(json.loads(p.read_text()),{"archive":[]})
+
+    def test_rollover_thursday(self):
+        before=datetime(2026,11,26,7,59,tzinfo=timezone.utc)
+        after=before+timedelta(minutes=1)
+        self.assertIn(date(2026,11,21),window_days("FBS",display_day(before)))
+        self.assertNotIn(date(2026,11,21),window_days("FBS",display_day(after)))
+        self.assertIn(date(2026,11,28),window_days("FCS",display_day(after)))
+    def test_basketball_rollover(self):
+        before=datetime(2026,11,24,7,59,tzinfo=timezone.utc)
+        after=before+timedelta(minutes=1)
+        self.assertEqual(window_days("MBB",display_day(before)),{date(2026,11,22),D,date(2026,11,24)})
+        self.assertEqual(window_days("WBB",display_day(after)),{D,date(2026,11,24),date(2026,11,25)})
+    def test_due_slots(self):
+        start=datetime(2026,11,23,21,tzinfo=timezone.utc)
+        g=dict(self.game(),final_seen_at=start.isoformat())
+        for m,expected in [(0,0),(4,0),(5,5),(59,55),(60,60),(74,60),(75,75),(239,225),(240,240),(299,240),(300,300),(1439,1380),(1440,None)]:
+            self.assertEqual(slot(g,start+timedelta(minutes=m)),None if expected is None else ("post",expected))
+    def test_pregame_center_and_expiry(self):
+        now=datetime(2026,11,23,16,tzinfo=timezone.utc)
+        g=self.game(event("pre","STATUS_SCHEDULED",False))
+        r={"kind":"game_center","sport":"FBS","date":D.isoformat(),"school":"nebraska","teams":[["Nebraska",None],["Ohio State",None]],"url":"https://huskers.com/game-center/123","reviewed":True}
+        apply_links(g,[r],now);self.assertEqual(g["reports"][0]["kind"],"game_center")
+        self.assertEqual(len(g["reports"]),1)
+        apply_links(g,[r],now+timedelta(hours=1));self.assertEqual(len(g["reports"]),1)
+        f=self.game();f["final_seen_at"]=now.isoformat()
+        apply_links(f,[r],now+timedelta(hours=24));self.assertEqual(f["reports"],[])
+    def test_archive_enrichment_after_rollover(self):
+        start=datetime(2026,11,25,23,tzinfo=timezone.utc)
+        g=self.game();g["date_et"]="2026-11-25";g["start_utc"]="2026-11-25T18:00:00Z"
+        r={"kind":"pdf_box_score","sport":"FBS","date":"2026-11-25","school":"nebraska","teams":[["Nebraska",31],["Ohio State",28]],"url":"https://cdn.example.org/report.pdf","parent_url":"https://huskers.com/game-center/123","reviewed":True}
+        first=make_feed({g["key"]:g},{},D,date(2026,11,25),start)
+        nxt=make_feed({},first,D,date(2026,11,26),start+timedelta(hours=10),[r])
+        self.assertEqual(nxt["current"],[])
+        self.assertEqual(nxt["archive"][0]["reports"][0]["kind"],"pdf_box_score")
+        self.assertEqual(nxt["archive"][0]["final_seen_at"],start.isoformat())
+        last=make_feed({},nxt,D,date(2026,11,28),start+timedelta(days=3),[])
+        self.assertEqual(last["archive"][0]["reports"],nxt["archive"][0]["reports"])
+    def test_ambiguous_same_day(self):
+        now=datetime(2026,11,23,16,tzinfo=timezone.utc)
+        a=self.game(event("pre","STATUS_SCHEDULED",False))
+        b=dict(a,key="football:124",espn_game_id="124")
+        r={"kind":"game_center","sport":"FBS","date":D.isoformat(),"school":"nebraska","teams":[["Nebraska",None],["Ohio State",None]],"url":"https://huskers.com/game-center/123","reviewed":True}
+        out=make_feed({a["key"]:a,b["key"]:b},{},D,D,now,[r])
+        self.assertFalse(any(g["reports"] for g in out["current"]))
+    def test_ranges(self):
+        self.assertEqual(day_ranges([D,D+timedelta(days=1),D+timedelta(days=3)]),[[D,D+timedelta(days=1)],[D+timedelta(days=3)]])
+        groups=requested_days(datetime(2026,11,23,21,tzinfo=timezone.utc),{})
+        calls=[]
+        def fetch(url):
+            calls.append(url);return b'{"events":[]}'
+        collect(sorted(groups),self.idx,self.rows,[],fetch,groups)
+        self.assertEqual(len(calls),4)
