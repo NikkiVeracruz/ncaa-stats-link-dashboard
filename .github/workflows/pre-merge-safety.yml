@@ -43,6 +43,12 @@ jobs:
           mkdir -p preview
           python tracker.py --archive-start "$(TZ=America/New_York date +%F)" --output preview/feed.json
           cp site/index.html site/app.js site/style.css preview/
+      - name: Install PDF text verification tool for isolated trial
+        if: github.head_ref == 'research/bounded-vanderbilt-report-discovery'
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends poppler-utils
+          command -v pdftotext
       - name: One bounded official schedule acquisition trial
         if: github.head_ref == 'research/bounded-vanderbilt-report-discovery'
         run: python university_link_acquisition_probe.py
