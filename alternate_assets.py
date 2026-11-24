@@ -21,8 +21,8 @@ def inspect(rows,refs):
         d=date_key(r.get("game_date") or r.get("date"))
         c=clean_id(r.get("contest_id"))
         e=clean_id(r.get("espn_game_id"))
-        if c and d:
-            ids[d].add(c)
+        if c:
+            if d: ids[d].add(c)
             if e: maps[e].add(c)
     return {"latest_date":max(ids,default=None),"dates":{d:len(v) for d,v in sorted(ids.items()) if "2026-11-14"<=d<="2026-11-23"},
             "saved_reference_matches":dict(Counter(r["sport"] for r in refs if r["id"] in ids.get(r["date"],set()))),
@@ -42,10 +42,10 @@ def main():
         try:
             raw=fetch_bytes(f"{RELEASES}/{tag}/{tag}_{season}.parquet",attempts=1)
             t=pq.read_table(io.BytesIO(raw))
-            if "contest_id" not in t.column_names or not {"game_date","date"}.intersection(t.column_names):
+            if "contest_id" not in t.column_names or not {"game_date","date","espn_game_id"}.intersection(t.column_names):
                 raise ValueError(f"missing required columns: {t.column_names}")
             r,m=inspect(t.to_pylist(),[x for x in refs if x["sport"] in sports])
-            r.update(rows=t.num_rows,columns=t.column_names,sha256=hashlib.sha256(raw).hexdigest())
+            r.update(date_available=bool({"game_date","date"}.intersection(t.column_names)),rows=t.num_rows,columns=t.column_names,sha256=hashlib.sha256(raw).hexdigest())
             r["espn_comparison"]={}
             for d,report in reports.items():
                 for sport in sports:
