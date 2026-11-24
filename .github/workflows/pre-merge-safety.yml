@@ -30,6 +30,8 @@ jobs:
         run: python ncaa_poc.py --date 2026-11-22 --output diagnostics/basketball-sunday.json
       - name: Bounded recent-date reliability baseline
         run: python reliability_probe.py --end 2026-11-23 --days 12 --output diagnostics/reliability.json
+      - name: Compare NCAA.com public demo IDs with known FBS reference
+        run: python ncaa_com_probe.py --output diagnostics/ncaa-com-equivalence.json
       - name: Save diagnostic evidence even if data sources fail
         if: always()
         uses: actions/upload-artifact@v4
@@ -39,6 +41,7 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
       - name: Safety invariant
+        if: always()
         run: |
           test ! -d archive
           test ! -d docs
