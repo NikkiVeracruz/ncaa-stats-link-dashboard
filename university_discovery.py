@@ -26,7 +26,6 @@ STATE_KEY = "university_discovery"
 SOURCES = {
     "vanderbilt": {"name": "Vanderbilt University", "pdf_name": "Vanderbilt", "host": "vucommodores.com", "path": "/sports/wbball/schedule", "prefix": "/vucommodores-prod/"},
     "iowa": {"name": "University of Iowa", "pdf_name": "Iowa", "host": "hawkeyesports.com", "path": "/sports/wbball/schedule", "prefix": "/hawkeyesports-prod/"},
-    "virginia_tech": {"name": "Virginia Tech", "pdf_name": "Virginia Tech", "host": "hokiesports.com", "path": "/sports/womens-basketball/schedule", "prefix": "/virginiatech-prod/", "heading_order": "sport_first", "short_result": True},
     "miami_florida": {"name": "University of Miami", "pdf_name": "Miami (FL)", "host": "miamihurricanes.com", "path": "/sports/wbball/schedule", "prefix": "/miamihurricanes-com-prod/", "pdf_labels": ("box score (pdf)", "gamebook")},
 }
 MAX_SOURCES_PER_RUN = 3
