@@ -5,7 +5,7 @@ import argparse,csv,json,os,tempfile
 from link_enrichment import apply_links, match
 from datetime import date,datetime,timedelta,timezone
 from pathlib import Path
-from urllib.parse import urlsplit,urlencode
+from urllib.parse import urlsplit
 from ncaa_poc import SPORTS,EASTERN,fetch_bytes,parse_event,scoreboard_url,clean_id
 from university_probe import ROOT,index,resolve,identity,norm,host
 from published_link_probe import allowed_url
@@ -81,36 +81,23 @@ def merge_game(g,h):
     best["scoreboards"]={**g["scoreboards"],**h["scoreboards"]}
     return best
 
-def day_ranges(days):
-    spans=[]
-    for d in sorted(set(days)):
-        if spans and d==spans[-1][-1]+timedelta(days=1):spans[-1].append(d)
-        else:spans.append([d])
-    return spans
-
 def collect(days,idx,rows,overrides,fetcher=fetch_bytes,groups=None):
     games={}
-    def read(group,sport,groupid,span):
-        query=span[0].strftime("%Y%m%d")
-        if len(span)>1:query+="-"+span[-1].strftime("%Y%m%d")
-        url="https://site.api.espn.com/apis/site/v2/sports/"+sport+"/scoreboard?"+urlencode({"dates":query,"groups":groupid,"limit":500})
-        payload=json.loads(fetcher(url))
-        events=payload.get("events")
-        if not isinstance(events,list):raise ValueError("Incomplete scoreboard "+group)
-        if len(events)>=500:
-            if len(span)==1:raise ValueError("Truncated scoreboard "+group)
-            mid=len(span)//2
-            read(group,sport,groupid,span[:mid]);read(group,sport,groupid,span[mid:])
-            return
-        allowed={d.isoformat() for d in span}
-        for event in events:
-            g=from_event(event,group,idx,rows,overrides)
-            if g["date_et"] not in allowed:continue
-            key=g["key"]
-            games[key]=merge_game(games[key],g) if key in games else g
-    for group,(sport,groupid,_) in SPORTS.items():
-        for span in day_ranges(d for d in days if groups is None or group in groups.get(d,set())):
-            read(group,sport,groupid,span)
+    for day in sorted(set(days)):
+        for group,(sport,groupid,_) in SPORTS.items():
+            if groups is not None and group not in groups.get(day,set()):continue
+            url=scoreboard_url(sport,groupid,day)
+            try:
+                payload=json.loads(fetcher(url))
+            except Exception as exc:
+                raise RuntimeError(f"Scoreboard request failed: {group} {day}: {exc}") from exc
+            events=payload.get("events")
+            if not isinstance(events,list) or len(events)>=500:raise ValueError(f"Incomplete scoreboard {group} {day}")
+            for event in events:
+                g=from_event(event,group,idx,rows,overrides)
+                if g["date_et"] not in {d.isoformat() for d in days}:continue
+                key=g["key"]
+                games[key]=merge_game(games[key],g) if key in games else g
     return games
 
 def display_day(now):
