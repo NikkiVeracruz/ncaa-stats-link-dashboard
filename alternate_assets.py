@@ -2,15 +2,23 @@
 import io,json,hashlib
 from collections import defaultdict,Counter
 from pathlib import Path
-from datetime import date
+from datetime import date, datetime
 from ncaa_poc import RELEASES,fetch_bytes,clean_id,process_day
 import pyarrow.parquet as pq
+
+def date_key(value):
+    for fmt in ("%Y-%m-%d","%m/%d/%Y"):
+        try:
+            return datetime.strptime(str(value)[:10],fmt).date().isoformat()
+        except ValueError:
+            pass
+    return None
 
 def inspect(rows,refs):
     ids=defaultdict(set)
     maps=defaultdict(set)
     for r in rows:
-        d=str(r.get("game_date") or r.get("date") or "")[:10]
+        d=date_key(r.get("game_date") or r.get("date"))
         c=clean_id(r.get("contest_id"))
         e=clean_id(r.get("espn_game_id"))
         if c and d:
@@ -35,7 +43,7 @@ def main():
             raw=fetch_bytes(f"{RELEASES}/{tag}/{tag}_{season}.parquet",attempts=1)
             t=pq.read_table(io.BytesIO(raw))
             if "contest_id" not in t.column_names or not {"game_date","date"}.intersection(t.column_names):
-                raise ValueError("missing required columns")
+                raise ValueError(f"missing required columns: {t.column_names}")
             r,m=inspect(t.to_pylist(),[x for x in refs if x["sport"] in sports])
             r.update(rows=t.num_rows,columns=t.column_names,sha256=hashlib.sha256(raw).hexdigest())
             r["espn_comparison"]={}
