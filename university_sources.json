@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "schools": {
+    "vanderbilt": {
+      "name": "Vanderbilt University",
+      "host": "vucommodores.com",
+      "platform": "wmt",
+      "prefix": "/vucommodores-prod/",
+      "sports": {
+        "WBB": {
+          "pdf_name": "Vanderbilt",
+          "path": "/sports/wbball/schedule",
+          "status": "verified",
+          "control": "wbb:401913059",
+          "validation_run": 45419033993
+        }
+      }
+    },
+    "iowa": {
+      "name": "University of Iowa",
+      "host": "hawkeyesports.com",
+      "platform": "wmt",
+      "prefix": "/hawkeyesports-prod/",
+      "sports": {
+        "WBB": {
+          "pdf_name": "Iowa",
+          "path": "/sports/wbball/schedule",
+          "status": "verified",
+          "control": "wbb:401921427",
+          "validation_run": 45420885097
+        }
+      }
+    },
+    "miami_florida": {
+      "name": "University of Miami",
+      "host": "miamihurricanes.com",
+      "platform": "wmt",
+      "prefix": "/miamihurricanes-com-prod/",
+      "sports": {
+        "WBB": {
+          "pdf_name": "Miami (FL)",
+          "path": "/sports/wbball/schedule",
+          "status": "verified",
+          "control": "wbb:401913729",
+          "validation_run": 45420885097,
+          "pdf_labels": [
+            "box score (pdf)",
+            "gamebook"
+          ]
+        }
+      }
+    },
+    "lsu": {
+      "name": "Louisiana State University",
+      "host": "lsusports.net",
+      "platform": "wmt",
+      "prefix": "/lsusports-net-prod/",
+      "sports": {
+        "WBB": {
+          "pdf_name": "LSU",
+          "path": "/sports/wbball/schedule",
+          "status": "verified",
+          "control": "wbb:401912970",
+          "validation_run": 45422877110,
+          "pdf_labels": [
+            "box score (.pdf)"
+          ],
+          "repeat_date": true
+        }
+      }
+    },
+    "san_jose_state": {
+      "name": "San Jose State University",
+      "host": "sjsuspartans.com",
+      "platform": "wmt",
+      "prefix": "/san-jose-state-prod/",
+      "sports": {
+        "MBB": {
+          "pdf_name": "San Jose St.",
+          "path": "/sports/mens-basketball/schedule",
+          "status": "verified",
+          "control": "mbb:401921664",
+          "validation_run": 45422877110,
+          "compact_date": true
+        }
+      }
+    }
+  }
+}

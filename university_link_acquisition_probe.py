@@ -4,7 +4,10 @@ No production integration, no player data, no stored source HTML, no guessed
 report URLs. A robots denial, redirect, failed fetch or ambiguous row stops the
 probe. Results are candidates, not verified reports.
 """
+import gzip
+import io
 import json
+import zlib
 import re
 import subprocess
 from urllib.error import HTTPError
@@ -35,6 +38,26 @@ def allowed(url, host=HOST):
         return False
 
 
+def read_body(response, limit):
+    """Bound both wire bytes and decoded bytes; accept only identity or gzip."""
+    raw = response.read(limit + 1)
+    if len(raw) > limit:
+        raise ValueError("Source exceeds wire size limit")
+    encoding = response.headers.get("Content-Encoding", "").strip().lower()
+    if encoding in ("", "identity") and not raw.startswith(b"\x1f\x8b"):
+        return raw
+    if encoding not in ("", "identity", "gzip", "x-gzip"):
+        raise ValueError("Unsupported content encoding")
+    try:
+        with gzip.GzipFile(fileobj=io.BytesIO(raw)) as stream:
+            data = stream.read(limit + 1)
+    except (OSError, EOFError, zlib.error) as exc:
+        raise ValueError("Invalid gzip response") from exc
+    if len(data) > limit:
+        raise ValueError("Source exceeds decoded size limit")
+    return data
+
+
 def get(url, content_type, *, host=HOST):
     if not allowed(url, host):
         raise ValueError("Unexpected source host")
@@ -43,9 +66,7 @@ def get(url, content_type, *, host=HOST):
     ) as response:
         if response.status != 200 or response.headers.get_content_type() != content_type:
             raise ValueError("Unexpected source status or content type")
-        data = response.read(LIMIT + 1)
-    if len(data) > LIMIT:
-        raise ValueError("Source exceeds size limit")
+        data = read_body(response, LIMIT)
     return data.decode("utf-8", errors="strict")
 
 
@@ -212,8 +233,7 @@ def get_pdf(url, prefix=CDN_PREFIX):
         with opener.open(Request(CDN + "/robots.txt", headers={"User-Agent": AGENT}), timeout=15) as response:
             if response.status != 200 or response.headers.get_content_type() != "text/plain":
                 raise ValueError("Unexpected CDN robots response")
-            raw = response.read(100_001)
-            if len(raw) > 100_000: raise ValueError("CDN robots exceeds limit")
+            raw = read_body(response, 100_000)
             rules = RobotFileParser(); rules.parse(raw.decode("utf-8").splitlines())
             if not rules.can_fetch(AGENT, url): raise ValueError("CDN robots disallows PDF request")
     except HTTPError as exc:
@@ -221,7 +241,7 @@ def get_pdf(url, prefix=CDN_PREFIX):
     with opener.open(Request(url, headers={"User-Agent": AGENT, "Accept": "application/pdf"}), timeout=15) as response:
         if response.status != 200 or response.headers.get_content_type() != "application/pdf":
             raise ValueError("PDF destination is not application/pdf")
-        data = response.read(8_000_001)
+        data = read_body(response, 8_000_000)
     if len(data) > 8_000_000 or not data.startswith(b"%PDF-"):
         raise ValueError("Invalid or oversized PDF")
     result = subprocess.run(["pdftotext", "-f", "1", "-l", "1", "-", "-"], input=data,

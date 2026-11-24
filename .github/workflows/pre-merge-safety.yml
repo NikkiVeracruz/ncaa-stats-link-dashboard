@@ -15,6 +15,8 @@ jobs:
           python-version: '3.12'
       - name: Compile read-only prototype
         run: python -m py_compile ncaa_poc.py reliability_probe.py tests/test_poc.py tests/test_reliability.py
+      - name: Validate explicit university source registry
+        run: python university_source_registry.py
       - name: Offline behavior and safety regression tests
         run: python -m unittest discover -s tests -v
       # Retrospective single-day source checks only; no games are archived.
