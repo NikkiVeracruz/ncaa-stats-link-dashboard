@@ -39,7 +39,6 @@ def from_event(event,group,idx,rows,overrides):
     if not g:raise ValueError("Malformed game")
     comp=event["competitions"][0]
     sides={s["homeAway"]:s["team"] for s in comp["competitors"]}
-    if any(not clean_id(sides[s].get("id")) or not sides[s].get("displayName") for s in ("home","away")):raise ValueError("Missing team identity")
     family=SPORTS[group][2]
     g["key"]=family+":"+g["espn_game_id"]
     g["start_utc"]=event["date"]
@@ -48,14 +47,20 @@ def from_event(event,group,idx,rows,overrides):
     state=typ.get("state")
     if state not in ("pre","in","post"):raise ValueError("Unknown game state")
     g["state"]=state
+    ids={s:clean_id(sides[s].get("id")) for s in ("home","away")}
+    if (state=="in" or typ.get("completed") and g["status"] in FINAL) and any(not ids[s] or not sides[s].get("displayName") for s in ids):
+        raise ValueError(f"Missing team identity in live/final {group} {g['date_et']} game {g['espn_game_id']}")
+    for side in ids:
+        if not ids[side]:
+            g[side+"_team"]=sides[side].get("displayName") or "TBD"
     g["status_text"]=typ.get("shortDetail") or typ.get("description") or g["status"]
     g["completed"]=bool(typ.get("completed")) and g["status"] in FINAL and state=="post" and g["home_score"] is not None and g["away_score"] is not None
     g["neutral_site"]=bool(comp.get("neutralSite"))
     if state=="pre":g["home_score"]=g["away_score"]=None
     g["clock"]=rawstatus.get("displayClock") if state=="in" else None
     g["period"]=rawstatus.get("period") if state=="in" else None
-    g["team_ids"]={s:str(sides[s]["id"]) for s in ("home","away")}
-    keys={s:resolve(sides[s],idx) for s in ("home","away")}
+    g["team_ids"]=ids
+    keys={s:resolve(sides[s],idx) if ids[s] else None for s in ("home","away")}
     g["schools"]={s:school_link(keys[s],rows,group) for s in keys}
     g["school_keys"]=keys
     g["team_names"]={s:sorted({norm(sides[s].get(f)) for f in ("displayName","shortDisplayName","location")} - {""}) for s in sides}
@@ -71,11 +76,14 @@ def from_event(event,group,idx,rows,overrides):
     g["reports"].sort(key=lambda r:(r["side"]!="home",r["url"]))
     return g
 
+def team_conflict(a,b):
+    return any(a.get(s) and b.get(s) and a[s]!=b[s] for s in ("home","away"))
+
 def merge_game(g,h):
-    if any(g[k]!=h[k] for k in ("date_et","team_ids","start_utc")):raise ValueError("Conflicting game identity "+g["key"])
+    if any(g[k]!=h[k] for k in ("date_et","start_utc")) or team_conflict(g["team_ids"],h["team_ids"]):raise ValueError("Conflicting game identity "+g["key"])
     if g["completed"] and h["completed"] and any(g[k]!=h[k] for k in ("home_score","away_score")):raise ValueError("Conflicting final scores "+g["key"])
     # Within a poll, prefer final over live, live over scheduled.
-    rank=lambda x: (x["completed"],x["state"]=="in")
+    rank=lambda x: (x["completed"],x["state"]=="in",sum(bool(v) for v in x["team_ids"].values()))
     best=dict(max((g,h),key=rank))
     best["sports"]=sorted(set(g["sports"]+h["sports"]))
     best["scoreboards"]={**g["scoreboards"],**h["scoreboards"]}
@@ -135,13 +143,13 @@ def make_feed(games,prior,cutoff,today,now,observations=None):
     active={k:g for k,g in previous.items() if not g["completed"] and g["status"] not in TERMINAL}
     for key,g in games.items():
         old=previous.get(key)
-        if old and old["team_ids"]!=g["team_ids"]:raise ValueError("Game identity conflict "+key)
+        if old and team_conflict(old["team_ids"],g["team_ids"]):raise ValueError("Game identity conflict "+key)
         if key in archive:
             if old["date_et"]!=g["date_et"]:raise ValueError("Archived game date conflict "+key)
             if not g["completed"]:g=dict(old)
         if g["completed"]:
             g["final_seen_at"]=(old.get("final_seen_at") if old else None) or now.isoformat()
-        if old and old["date_et"]==g["date_et"]:
+        if old and old["date_et"]==g["date_et"] and old["team_ids"]==g["team_ids"]:
             if old.get("discovery"):g["discovery"]=old["discovery"]
             g["reports"]=list({(r.get("kind","box_score"),r["url"]):r for r in old.get("reports",[])+g.get("reports",[])}.values())
         active[key]=g
