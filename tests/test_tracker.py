@@ -91,3 +91,14 @@ class TrackerTests(unittest.TestCase):
         collect(sorted(groups),self.idx,self.rows,[],fetch,groups)
         self.assertEqual(len(calls),20)
         self.assertTrue(all(len(u.split('dates=')[1].split('&')[0])==8 for u in calls))
+
+    def test_scheduled_placeholder(self):
+        e=event("pre","STATUS_SCHEDULED",False)
+        e["competitions"][0]["competitors"][1]["team"]={"displayName":"TBD"}
+        g=self.game(e);self.assertEqual(g["away_team"],"TBD");self.assertIsNone(g["team_ids"]["away"])
+        self.assertIsNone(g["schools"]["away"]);self.assertFalse(g["completed"])
+        resolved=merge_game(g,self.game(event("pre","STATUS_SCHEDULED",False)))
+        self.assertEqual(resolved["team_ids"]["away"],"2")
+    def test_invalid_final_identity(self):
+        e=event();e["competitions"][0]["competitors"][1]["team"]={"displayName":"TBD"}
+        with self.assertRaisesRegex(ValueError,"Missing team identity"):self.game(e)
