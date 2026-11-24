@@ -16,7 +16,6 @@ from urllib.robotparser import RobotFileParser
 
 from link_enrichment import slot
 from tracker import directory, write_feed
-from university_probe import norm
 from university_link_acquisition_probe import (
     AGENT, BASE, SOURCE, candidates, get, download_link, get_pdf, pdf_identity,
 )
@@ -144,11 +143,32 @@ def enrich(feed, now, fetcher=acquire):
     return report
 
 
+def live_control():
+    """Exercise the production path with one known matchup, in memory only."""
+    g = {"key": "wbb:401913059", "sports": ["WBB"], "date_et": "2026-11-23",
+         "completed": True, "final_seen_at": "2026-11-24T02:51:30+00:00",
+         "school_keys": {"home": "vanderbilt", "away": "arizona"},
+         "team_ids": {"home": "238", "away": "12"},
+         "team_names": {"home": ["vanderbilt"], "away": ["arizona"]},
+         "home_score": 93, "away_score": 62, "reports": []}
+    feed = {"archive_start": "2026-11-23", "current": [g], "archive": [dict(g, reports=[])]}
+    now = datetime.fromisoformat("2026-11-24T14:00:00+00:00")
+    report = enrich(feed, now)
+    if not report or feed["archive"][0]["reports"] != feed["current"][0]["reports"]:
+        raise SystemExit("Live pilot did not produce an identical verified PDF in both views")
+
+
 def main():
     p = argparse.ArgumentParser()
-    p.add_argument("--feed", required=True, type=Path)
+    p.add_argument("--feed", type=Path)
+    p.add_argument("--live-control", action="store_true")
     p.add_argument("--check-due", action="store_true")
     a = p.parse_args()
+    if a.live_control:
+        live_control()
+        return
+    if not a.feed:
+        p.error("--feed is required")
     feed = json.loads(a.feed.read_text())
     now = datetime.now(timezone.utc)
     if a.check_due:
