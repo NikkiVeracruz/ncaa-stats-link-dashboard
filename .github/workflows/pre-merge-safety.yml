@@ -36,7 +36,7 @@ jobs:
         run: python published_link_probe.py
       - name: Compile tracker and check browser script
         run: |
-          python -m py_compile tracker.py
+          python -m py_compile tracker.py link_enrichment.py
           node --check site/app.js
       - name: Build disposable current NCAA tracker preview
         run: |
@@ -63,4 +63,6 @@ jobs:
           test ! -d archive
           test ! -d docs
           test ! -e index.html
-          echo 'No production dashboard, score scraping, archive or automatic schedule configured'
+          test ! -e feed.json
+          test ! -d publish
+          echo 'PR checks do not deploy or persist production data'
