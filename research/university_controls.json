@@ -1,0 +1,74 @@
+[
+  {
+    "sport": "FBS",
+    "date": "2026-11-21",
+    "teams": [
+      [
+        "Ohio State",
+        28
+      ],
+      [
+        "Nebraska",
+        31
+      ]
+    ],
+    "school": "nebraska",
+    "url": "https://huskers.com/boxscore/21833",
+    "report": "box_score",
+    "participation": "not_confirmed"
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "teams": [
+      [
+        "Montana",
+        16
+      ],
+      [
+        "Montana State",
+        42
+      ]
+    ],
+    "school": "montana_state_university_bozeman",
+    "url": "https://msubobcats.com/sports/football/stats/2026/montana/boxscore/6242",
+    "report": "box_score",
+    "participation": "participation_tab_present"
+  },
+  {
+    "sport": "MBB",
+    "date": "2026-11-21",
+    "teams": [
+      [
+        "Winthrop",
+        86
+      ],
+      [
+        "Wofford",
+        91
+      ]
+    ],
+    "school": "winthrop",
+    "url": "https://winthropeagles.com/boxscore.aspx?id=24088&path=mbball",
+    "report": "box_score",
+    "participation": "minutes_present"
+  },
+  {
+    "sport": "WBB",
+    "date": "2026-11-21",
+    "teams": [
+      [
+        "Duke",
+        71
+      ],
+      [
+        "Columbia",
+        47
+      ]
+    ],
+    "school": "columbia_university_barnard",
+    "url": "https://gocolumbialions.com/sports/womens-basketball/stats/2026-27/duke/boxscore/15598",
+    "report": "box_score",
+    "participation": "minutes_present"
+  }
+]
