@@ -6,6 +6,8 @@ probe. Results are candidates, not verified reports.
 """
 import json
 import re
+import subprocess
+from urllib.error import HTTPError
 from html.parser import HTMLParser
 from urllib.parse import urljoin, urlsplit
 from urllib.robotparser import RobotFileParser
@@ -135,6 +137,69 @@ def candidates(html, *, opponent="Arizona", day="Nov 23", result="Win 93-62"):
     return {kind: next(iter(urls)) for kind, urls in merged.items()}
 
 
+
+CDN = "https://storage.googleapis.com"
+CDN_PREFIX = "/vucommodores-prod/"
+
+
+def cdn_allowed(url):
+    try:
+        u = urlsplit(url)
+        return (u.scheme == "https" and u.hostname == "storage.googleapis.com" and
+                not u.username and not u.password and u.port in (None, 443) and
+                u.path.startswith(CDN_PREFIX) and u.path.lower().endswith(".pdf") and
+                "%" not in u.path and ".." not in u.path.split("/") and not u.query and not u.fragment)
+    except ValueError:
+        return False
+
+
+def download_link(html, parent):
+    tree = Tree(); tree.feed(html)
+    links = {urljoin(parent, a.attrs.get("href", "")) for a in tree.root.walk()
+             if a.tag == "a" and normalized(a.text()) in ("download", "download pdf")}
+    links = {u for u in links if cdn_allowed(u)}
+    return next(iter(links)) if len(links) == 1 else None
+
+
+def pdf_identity(text, *, opponent, day, own_score, opponent_score, season):
+    # Require exact labeled teams/scores, date, final report marker and sport.
+    text = normalized(text)
+    required = ("official basketball box score - final", season.lower() + " women's basketball")
+    if not all(x in text for x in required):
+        return False
+    if not re.search(r"\\b" + re.escape(day) + r"\\b", text):
+        return False
+    def score(name, value):
+        return bool(re.search(r"\\b" + re.escape(name.lower()) + r"\\s*-\\s*" + str(value) + r"\\s+record\\s*:", text))
+    return score("Vanderbilt", own_score) and score(opponent, opponent_score)
+
+
+def get_pdf(url):
+    if not cdn_allowed(url):
+        raise ValueError("Unexpected PDF destination")
+    # Check the CDN's robots rules as well; RFC 9309 permits access when the
+    # robots resource itself is absent (404/410), but not on denial/5xx.
+    opener = build_opener(NoRedirect())
+    try:
+        with opener.open(Request(CDN + "/robots.txt", headers={"User-Agent": AGENT}), timeout=15) as response:
+            if response.status != 200 or response.headers.get_content_type() != "text/plain":
+                raise ValueError("Unexpected CDN robots response")
+            raw = response.read(100_001)
+            if len(raw) > 100_000: raise ValueError("CDN robots exceeds limit")
+            rules = RobotFileParser(); rules.parse(raw.decode("utf-8").splitlines())
+            if not rules.can_fetch(AGENT, url): raise ValueError("CDN robots disallows PDF request")
+    except HTTPError as exc:
+        if exc.code not in (404, 410): raise
+    with opener.open(Request(url, headers={"User-Agent": AGENT, "Accept": "application/pdf"}), timeout=15) as response:
+        if response.status != 200 or response.headers.get_content_type() != "application/pdf":
+            raise ValueError("PDF destination is not application/pdf")
+        data = response.read(8_000_001)
+    if len(data) > 8_000_000 or not data.startswith(b"%PDF-"):
+        raise ValueError("Invalid or oversized PDF")
+    result = subprocess.run(["pdftotext", "-f", "1", "-l", "1", "-", "-"], input=data,
+                            stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, timeout=15, check=True)
+    return result.stdout.decode("utf-8", errors="strict")
+
 def main():
     # Explicit one-school, one-sport, one current archive-game control.
     # Stop rather than retry or work around access restrictions.
@@ -151,7 +216,20 @@ def main():
             "control": "wbb:401913059", "date": "2026-11-23",
             "source": SOURCE, "candidates": links, "verified": False
         }), flush=True)
-        return 0 if set(links) == {"box_score", "pdf_candidate"} else 2
+        if set(links) != {"box_score", "pdf_candidate"}:
+            return 2
+        parent = links["pdf_candidate"]
+        if not robots.can_fetch(AGENT, parent):
+            raise ValueError("Robots disallows PDF wrapper")
+        pdf_url = download_link(get(parent, "text/html"), parent)
+        if not pdf_url:
+            raise ValueError("No unique official PDF download link")
+        text = get_pdf(pdf_url)
+        verified = pdf_identity(text, opponent="Arizona", day="11/23/26",
+                                own_score=93, opponent_score=62, season="2026-27")
+        print("UNIVERSITY_PDF_VERIFICATION", json.dumps({"control":"wbb:401913059",
+              "verified":verified, "url":pdf_url}), flush=True)
+        return 0 if verified else 4
     except (OSError, ValueError, UnicodeError, RecursionError) as exc:
         print("UNIVERSITY_LINK_PROBE STOP:", str(exc), flush=True)
         return 3
