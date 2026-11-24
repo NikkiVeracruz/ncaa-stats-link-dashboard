@@ -17,3 +17,9 @@ class TestUniversity(unittest.TestCase):
         self.assertFalse(identity(dict(g,home_score=30),r,names))
         self.assertFalse(identity(dict(g,completed=False),r,names))
         self.assertFalse(identity(dict(g,date_et="2026-11-22"),r,names))
+
+    def test_exact_aliases(self):
+        idx=index([{"key":"texas_san_antonio","name":"University of Texas at San Antonio"},{"key":"alabama_birmingham","name":"University of Alabama at Birmingham"}])
+        self.assertEqual(resolve({"location":"UTSA"},idx),"texas_san_antonio")
+        self.assertEqual(resolve({"location":"UAB"},idx),"alabama_birmingham")
+        self.assertIsNone(resolve({"location":"UTSA","displayName":"UAB Blazers"},idx))

@@ -10,7 +10,7 @@ from urllib.parse import urlsplit
 from ncaa_poc import SPORTS, fetch_bytes, scoreboard_url, parse_event
 
 ROOT=Path(__file__).parent/"research"
-ALIASES={"nebraska":["Nebraska"],"montana_state_university_bozeman":["Montana State"],"columbia_university_barnard":["Columbia"],"winthrop":["Winthrop"]}
+ALIASES=json.loads((ROOT/"reviewed_team_aliases.json").read_text())
 def norm(s):
     return re.sub(r"[^a-z0-9]","",unicodedata.normalize("NFKC",str(s or "")).casefold())
 def host(s):
@@ -45,7 +45,7 @@ def main():
                 sides={s["homeAway"]:s["team"] for s in event["competitions"][0]["competitors"]}
                 keys={k:resolve(sides[k],idx) for k in ("home","away")}
                 names={k:{norm(sides[k].get(f)) for f in ("displayName","shortDisplayName","location")} for k in sides}
-                controls=[r for r in refs if identity(g,r,names) and r["school"] in bykey and host(r["url"])==host(bykey[r["school"]]["site"]) and urlsplit(r["url"]).scheme=="https"]
+                controls=[r for r in refs if identity(g,r,names) and r["school"] in keys.values() and r["school"] in bykey and host(r["url"])==host(bykey[r["school"]]["site"]) and urlsplit(r["url"]).scheme=="https"]
                 results.append({"sport":group,"espn_id":g["espn_game_id"],"teams":[g["away_team"],g["home_team"]],"directory":keys,"reviewed_control_urls":[r["url"] for r in controls]})
         except Exception as exc:
             errors.append(group+": "+str(exc))
@@ -53,6 +53,10 @@ def main():
         rs=[r for r in results if r["sport"]==group]
         print("DIRECTORY",group,json.dumps({"completed":len(rs),"home_candidate":sum(bool(r["directory"]["home"]) for r in rs),"either_candidate":sum(any(r["directory"].values()) for r in rs),"both_candidates":sum(all(r["directory"].values()) for r in rs),"reviewed_controls":sum(bool(r["reviewed_control_urls"]) for r in rs)}))
     print("UNIQUE",len(set(r["espn_id"] for r in results)))
+    bygame=defaultdict(list)
+    for r in results: bygame[r["espn_id"]].append(r)
+    print("UNIQUE_COVERAGE",json.dumps({"games":len(bygame),"either_school":sum(any(any(r["directory"].values()) for r in rs) for rs in bygame.values()),"reviewed_links":sum(any(r["reviewed_control_urls"] for r in rs) for rs in bygame.values())}))
+    print("UNRESOLVED",json.dumps([r for r in results if not any(r["directory"].values())]))
     print("CONTROL_MATCHES",json.dumps([r for r in results if r["reviewed_control_urls"]]))
     print("ERRORS",errors)
     Path("diagnostics").mkdir(exist_ok=True)

@@ -70,5 +70,252 @@
     "url": "https://gocolumbialions.com/sports/womens-basketball/stats/2026-27/duke/boxscore/15598",
     "report": "box_score",
     "participation": "minutes_present"
+  },
+  {
+    "sport": "FBS",
+    "date": "2026-11-21",
+    "teams": [
+      [
+        "Middle Tennessee Blue Raiders",
+        31
+      ],
+      [
+        "Sam Houston Bearkats",
+        28
+      ]
+    ],
+    "school": "sam_houston_state",
+    "url": "https://gobearkats.com/sports/football/stats/2026/middle-tennessee/boxscore/15549",
+    "report": "box_score",
+    "participation": "not_assessed",
+    "discovery": "independent public web search, official page inspected; ESPN display labels normalized"
+  },
+  {
+    "sport": "FBS",
+    "date": "2026-11-21",
+    "teams": [
+      [
+        "UL Monroe Warhawks",
+        16
+      ],
+      [
+        "App State Mountaineers",
+        17
+      ]
+    ],
+    "school": "appalachian_state",
+    "url": "https://appstatesports.com/sports/football/stats/2026/ulm/boxscore/9923",
+    "report": "box_score",
+    "participation": "not_assessed",
+    "discovery": "independent public web search, official page inspected; ESPN display labels normalized"
+  },
+  {
+    "sport": "FBS",
+    "date": "2026-11-21",
+    "teams": [
+      [
+        "UNLV Rebels",
+        24
+      ],
+      [
+        "San José State Spartans",
+        22
+      ]
+    ],
+    "school": "nevada_las_vegas",
+    "url": "https://unlvrebels.com/sports/football/stats/2026/san-jos-state/boxscore/17835",
+    "report": "box_score",
+    "participation": "not_assessed",
+    "discovery": "independent public web search, official page inspected; ESPN display labels normalized"
+  },
+  {
+    "sport": "FBS",
+    "date": "2026-11-21",
+    "teams": [
+      [
+        "UTSA Roadrunners",
+        19
+      ],
+      [
+        "UAB Blazers",
+        17
+      ]
+    ],
+    "school": "alabama_birmingham",
+    "url": "https://uabsports.com/sports/football/stats/2026/utsa/boxscore/23161",
+    "report": "box_score",
+    "participation": "not_assessed",
+    "discovery": "independent public web search, official page inspected; ESPN display labels normalized"
+  },
+  {
+    "sport": "FBS",
+    "date": "2026-11-21",
+    "teams": [
+      [
+        "Hawai'i Rainbow Warriors",
+        8
+      ],
+      [
+        "Nevada Wolf Pack",
+        16
+      ]
+    ],
+    "school": "nevada_reno",
+    "url": "https://nevadawolfpack.com/sports/football/stats/2026/hawai-i/boxscore/14079",
+    "report": "box_score",
+    "participation": "not_assessed",
+    "discovery": "independent public web search, official page inspected; ESPN display labels normalized"
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "teams": [
+      [
+        "UAlbany Great Danes",
+        24
+      ],
+      [
+        "North Carolina A&T Aggies",
+        7
+      ]
+    ],
+    "school": "north_carolina_a_and_t_state",
+    "url": "https://ncataggies.com/sports/football/stats/2026/university-at-albany/boxscore/6181",
+    "report": "box_score",
+    "participation": "not_assessed",
+    "discovery": "independent public web search, official page inspected; ESPN display labels normalized"
+  },
+  {
+    "sport": "MBB",
+    "date": "2026-11-21",
+    "teams": [
+      [
+        "Calumet St. Joseph Crimson Wave",
+        53
+      ],
+      [
+        "Purdue Fort Wayne Mastodons",
+        99
+      ]
+    ],
+    "school": "purdue_university_fort_wayne",
+    "url": "https://gomastodons.com/sports/mens-basketball/stats/2026-27/calumet-college-of-st-joseph-ind-/boxscore/16753",
+    "report": "box_score",
+    "participation": "not_assessed",
+    "discovery": "independent public web search, official page inspected; ESPN display labels normalized"
+  },
+  {
+    "sport": "MBB",
+    "date": "2026-11-21",
+    "teams": [
+      [
+        "Penn State Behrend Lions",
+        55
+      ],
+      [
+        "Colgate Raiders",
+        87
+      ]
+    ],
+    "school": "colgate",
+    "url": "https://colgateathletics.com/sports/mens-basketball/stats/2026-27/penn-state-behrend/boxscore/18505",
+    "report": "box_score",
+    "participation": "not_assessed",
+    "discovery": "independent public web search, official page inspected; ESPN display labels normalized"
+  },
+  {
+    "sport": "MBB",
+    "date": "2026-11-21",
+    "teams": [
+      [
+        "St. Thomas Tommies",
+        98
+      ],
+      [
+        "Milwaukee Panthers",
+        70
+      ]
+    ],
+    "school": "wisconsin_milwaukee",
+    "url": "https://mkepanthers.com/sports/mens-basketball/stats/2026-27/st-thomas/boxscore/19208",
+    "report": "box_score",
+    "participation": "not_assessed",
+    "discovery": "independent public web search, official page inspected; ESPN display labels normalized"
+  },
+  {
+    "sport": "MBB",
+    "date": "2026-11-21",
+    "teams": [
+      [
+        "UT Rio Grande Valley Vaqueros",
+        79
+      ],
+      [
+        "Austin Peay Governors",
+        73
+      ]
+    ],
+    "school": "austin_peay_state",
+    "url": "https://letsgopeay.com/boxscore.aspx?id=14465&path=mbball",
+    "report": "box_score",
+    "participation": "not_assessed",
+    "discovery": "independent public web search, official page inspected; ESPN display labels normalized"
+  },
+  {
+    "sport": "MBB",
+    "date": "2026-11-21",
+    "teams": [
+      [
+        "Southern Miss Golden Eagles",
+        80
+      ],
+      [
+        "Nicholls Colonels",
+        69
+      ]
+    ],
+    "school": "nicholls_state",
+    "url": "https://geauxcolonels.com/sports/mens-basketball/stats/2026-27/southern-miss/boxscore/11417",
+    "report": "box_score",
+    "participation": "not_assessed",
+    "discovery": "independent public web search, official page inspected; ESPN display labels normalized"
+  },
+  {
+    "sport": "MBB",
+    "date": "2026-11-21",
+    "teams": [
+      [
+        "Air Force Falcons",
+        68
+      ],
+      [
+        "UTSA Roadrunners",
+        90
+      ]
+    ],
+    "school": "us_air_force_academy",
+    "url": "https://goairforcefalcons.com/sports/mens-basketball/stats/2026-27/utsa/boxscore/27069",
+    "report": "box_score",
+    "participation": "not_assessed",
+    "discovery": "independent public web search, official page inspected; ESPN display labels normalized"
+  },
+  {
+    "sport": "WBB",
+    "date": "2026-11-21",
+    "teams": [
+      [
+        "Coker Cobras",
+        51
+      ],
+      [
+        "Queens University Royals",
+        53
+      ]
+    ],
+    "school": "queens_university_of_charlotte",
+    "url": "https://queensathletics.com/sports/womens-basketball/stats/2026/coker/boxscore/13495",
+    "report": "box_score",
+    "participation": "not_assessed",
+    "discovery": "independent public web search, official page inspected; ESPN display labels normalized"
   }
 ]
