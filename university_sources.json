@@ -84,6 +84,180 @@
           "compact_date": true
         }
       }
+    },
+    "cincinnati": {
+      "name": "University of Cincinnati",
+      "host": "gobearcats.com",
+      "platform": "wmt",
+      "prefix": "/gobearcats-com-prod/",
+      "sports": {
+        "WBB": {
+          "pdf_name": "Cincinnati",
+          "path": "/sports/womens-basketball/schedule",
+          "control": "wbb:401916189",
+          "heading_order": "season_first",
+          "short_result": false,
+          "repeat_date": false,
+          "compact_date": false,
+          "pdf_labels": [
+            "box score (pdf)",
+            "box score (.pdf)",
+            "gamebook",
+            "box score pdf",
+            "pdf box score"
+          ],
+          "status": "verified",
+          "validation_run": 45425898284
+        }
+      }
+    },
+    "auburn": {
+      "name": "Auburn University",
+      "host": "auburntigers.com",
+      "platform": "wmt",
+      "prefix": "/auburn-prod/",
+      "sports": {
+        "MBB": {
+          "pdf_name": "Auburn",
+          "path": "/sports/mens-basketball/schedule",
+          "control": "mbb:401920519",
+          "heading_order": "season_first",
+          "short_result": false,
+          "repeat_date": false,
+          "compact_date": false,
+          "pdf_labels": [
+            "box score (pdf)",
+            "box score (.pdf)",
+            "gamebook",
+            "box score pdf",
+            "pdf box score"
+          ],
+          "status": "verified",
+          "validation_run": 45425898284
+        }
+      }
+    },
+    "missouri": {
+      "name": "University of Missouri",
+      "host": "mutigers.com",
+      "platform": "wmt",
+      "prefix": "/mutigers-com-prod/",
+      "sports": {
+        "MBB": {
+          "pdf_name": "Missouri",
+          "path": "/sports/mens-basketball/schedule",
+          "control": "mbb:401919784",
+          "heading_order": "season_first",
+          "short_result": false,
+          "repeat_date": false,
+          "compact_date": false,
+          "pdf_labels": [
+            "box score (pdf)",
+            "box score (.pdf)",
+            "gamebook",
+            "box score pdf",
+            "pdf box score"
+          ],
+          "status": "verified",
+          "validation_run": 45425898284
+        }
+      }
+    },
+    "purdue": {
+      "name": "Purdue University",
+      "host": "purduesports.com",
+      "platform": "wmt",
+      "prefix": "/purduesports-com-prod/",
+      "sports": {
+        "WBB": {
+          "pdf_name": "Purdue",
+          "path": "/sports/womens-basketball/schedule",
+          "control": "wbb:401918944",
+          "heading_order": "season_first",
+          "short_result": false,
+          "repeat_date": false,
+          "compact_date": false,
+          "pdf_labels": [
+            "box score (pdf)",
+            "box score (.pdf)",
+            "gamebook",
+            "box score pdf",
+            "pdf box score"
+          ],
+          "status": "verified",
+          "validation_run": 45425898284
+        },
+        "MBB": {
+          "pdf_name": "Purdue",
+          "path": "/sports/mens-basketball/schedule",
+          "control": "mbb:401926134",
+          "heading_order": "season_first",
+          "short_result": false,
+          "repeat_date": false,
+          "compact_date": false,
+          "pdf_labels": [
+            "box score (pdf)",
+            "box score (.pdf)",
+            "gamebook",
+            "box score pdf",
+            "pdf box score"
+          ],
+          "status": "verified",
+          "validation_run": 45425898284
+        }
+      }
+    },
+    "san_diego_state": {
+      "name": "San Diego State University",
+      "host": "goaztecs.com",
+      "platform": "wmt",
+      "prefix": "/sdsu-prod/",
+      "sports": {
+        "WBB": {
+          "pdf_name": "San Diego State",
+          "path": "/sports/womens-basketball/schedule",
+          "control": "wbb:401909674",
+          "heading_order": "season_first",
+          "short_result": true,
+          "repeat_date": false,
+          "compact_date": false,
+          "pdf_labels": [
+            "box score (pdf)",
+            "box score (.pdf)",
+            "gamebook",
+            "box score pdf",
+            "pdf box score"
+          ],
+          "status": "verified",
+          "validation_run": 45425898284
+        }
+      }
+    },
+    "stanford": {
+      "name": "Stanford University",
+      "host": "gostanford.com",
+      "platform": "wmt",
+      "prefix": "/stanford-prod/",
+      "sports": {
+        "WBB": {
+          "pdf_name": "Stanford",
+          "path": "/sports/womens-basketball/schedule",
+          "control": "wbb:401915983",
+          "heading_order": "season_first",
+          "short_result": false,
+          "repeat_date": false,
+          "compact_date": false,
+          "pdf_labels": [
+            "box score (pdf)",
+            "box score (.pdf)",
+            "gamebook",
+            "box score pdf",
+            "pdf box score"
+          ],
+          "status": "verified",
+          "validation_run": 45425898284
+        }
+      }
     }
   }
 }

@@ -45,8 +45,8 @@ class RegistryTests(unittest.TestCase):
     def setUp(self):
         self.data = json.loads(REGISTRY.read_text())
         _, self.rows = directory()
-    def test_five_verified_combinations(self):
-        self.assertEqual(sum(len(x) for x in load_registry().values()), 5)
+    def test_verified_combinations_and_baseline(self):
+        self.assertEqual(sum(len(x) for x in load_registry().values()), 12)
         self.assertEqual(set(SOURCES["san_jose_state"]), {"MBB"})
         self.assertEqual(set(SOURCES["vanderbilt"]), {"WBB"})
     def test_invalid_host_bucket_or_evidence(self):
