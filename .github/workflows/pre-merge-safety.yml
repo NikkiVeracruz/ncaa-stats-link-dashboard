@@ -34,6 +34,21 @@ jobs:
         run: python university_probe.py
       - name: Replay reviewed university published-link observations
         run: python published_link_probe.py
+      - name: Compile tracker and check browser script
+        run: |
+          python -m py_compile tracker.py
+          node --check site/app.js
+      - name: Build disposable current NCAA tracker preview
+        run: |
+          mkdir -p preview
+          python tracker.py --archive-start "$(TZ=America/New_York date +%F)" --output preview/feed.json
+          cp site/index.html site/app.js site/style.css preview/
+      - name: Save standalone preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: ncaa-tracker-preview
+          path: preview/
+          retention-days: 7
       - name: Save diagnostic evidence even if data sources fail
         if: always()
         uses: actions/upload-artifact@v4
