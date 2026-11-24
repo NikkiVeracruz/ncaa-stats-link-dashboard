@@ -19,3 +19,6 @@ Current and archive filters are separate; sport dropdowns retain expanded state 
 
 ## Activate standalone Pages
 Repo Settings > Pages > Build and deployment > Source: GitHub Actions. Then Actions > NCAA tracker update and publish > Run workflow on main. Verify first successful update and deployment, check live URL and data branch. Once verified, Settings > Secrets and variables > Actions > Variables > New repository variable: NCAA_TRACKER_ENABLED=true. This enables the five-minute scheduled workflow (GitHub may delay runs). The workflow serializes updates, loads prior ncaa-data/feed.json, persists new data before Pages publish, and never commits to main. Manual runs work without the schedule variable. No pre-merge workflow writes production data. If first activation fails, investigate; do not enable recurring execution before the cause is resolved. No paid services.
+
+## Scheduling experiment
+Observed Nov 23–24: ten successful scheduled runs, roughly 54–86 minutes apart despite a five-minute cron. Offset to `2-57/5 * * * *` (minutes 02, 07, …, 57), preserving all 12 slots per hour; GitHub's documented best-effort schedule may still delay/drop events. This is a mitigation trial, not a guaranteed timing fix. No additional scheduler, paid service, or monitoring changes. Verify actual scheduled run intervals after merge.
