@@ -29,7 +29,6 @@ SOURCES = {
     "miami_florida": {"name": "University of Miami", "pdf_name": "Miami (FL)", "host": "miamihurricanes.com", "path": "/sports/wbball/schedule", "prefix": "/miamihurricanes-com-prod/", "pdf_labels": ("box score (pdf)", "gamebook")},
     "lsu": {"name": "Louisiana State University", "pdf_name": "LSU", "host": "lsusports.net", "path": "/sports/wbball/schedule", "prefix": "/lsusports-net-prod/", "pdf_labels": ("box score (.pdf)",), "repeat_date": True},
     "san_jose_state": {"name": "San Jose State University", "pdf_name": "San Jose St.", "host": "sjsuspartans.com", "path": "/sports/mens-basketball/schedule", "prefix": "/san-jose-state-prod/", "sport": "MBB", "compact_date": True},
-    "virginia_tech": {"name": "Virginia Tech", "pdf_name": "Virginia Tech", "host": "hokiesports.com", "path": "/sports/womens-basketball/schedule", "prefix": "/virginiatech-prod/", "heading_order": "sport_first", "short_result": True},
 }
 MAX_SOURCES_PER_RUN = 3
 

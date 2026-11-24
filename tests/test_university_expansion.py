@@ -51,6 +51,7 @@ class ExpansionTests(unittest.TestCase):
 
     def test_unverified_school_is_not_enabled(self):
         self.assertNotIn("northwestern", SOURCES)
+        self.assertNotIn("virginia_tech", SOURCES)
 
     def test_virginia_tech_short_result(self):
         html = "<h1>Women's Basketball 2026-27 Schedule</h1><div><span>Nov 23</span><span>UT Martin</span><span>W 85-41</span><a href='/documents/control.pdf'>Box Score (PDF)</a></div>"

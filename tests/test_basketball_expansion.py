@@ -8,7 +8,7 @@ class BasketballExpansionTests(unittest.TestCase):
     def test_sport_specific_eligibility_and_preservation(self):
         feed = fixture()
         before = copy.deepcopy(feed["archive"])
-        self.assertEqual(len(eligible(feed, NOW)), 3)
+        self.assertEqual(len(eligible(feed, NOW)), 2)
         def verified(g, side):
             return {"kind": "pdf_box_score", "url": "https://example.test/" + g["key"] + ".pdf"}
         enrich(feed, NOW, verified)
@@ -27,7 +27,7 @@ class BasketballExpansionTests(unittest.TestCase):
         feed = fixture()
         same = dict(feed["archive"][0], key="mbb:other", sports=["MBB"])
         feed["archive"].append(same)
-        self.assertEqual(len(eligible(feed, NOW)), 3)
+        self.assertEqual(len(eligible(feed, NOW)), 2)
 
     def test_wrong_sport_pdf_rejected(self):
         text = "Official Basketball Box Score - Final 2026-27 Men's Basketball 11/23/26 San Jose St. - 88 Record: 4-3 UC San Diego - 79 Record: 3-3"

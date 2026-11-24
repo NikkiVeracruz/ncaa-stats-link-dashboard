@@ -7,7 +7,6 @@ NOW = datetime.fromisoformat("2026-11-24T15:10:00+00:00")
 CONTROLS = (
     ("wbb:401912970", "WBB", "lsu", "belmont", "99", "2057", "lsu", "belmont", 103, 45),
     ("mbb:401921664", "MBB", "uc_san_diego", "san_jose_state", "28", "23", "ucsandiego", "sanjosst", 79, 88),
-    ("wbb:401916019", "WBB", "tennessee_martin", "virginia_tech", "2630", "259", "utmartin", "virginiatech", 41, 85),
 )
 
 def fixture():
