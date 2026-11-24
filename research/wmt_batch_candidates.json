@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "control_start": "2026-11-18",
+  "control_end": "2026-11-23",
+  "schools": [
+    {
+      "school": "arizona_state",
+      "host": "thesundevils.com",
+      "paths": {
+        "MBB": "/sports/mens-basketball/schedule",
+        "WBB": "/sports/womens-basketball/schedule"
+      }
+    },
+    {
+      "school": "auburn",
+      "host": "auburntigers.com",
+      "paths": {
+        "MBB": "/sports/mens-basketball/schedule",
+        "WBB": "/sports/womens-basketball/schedule"
+      }
+    },
+    {
+      "school": "byu",
+      "host": "byucougars.com",
+      "paths": {
+        "MBB": "/sports/mens-basketball/schedule",
+        "WBB": "/sports/womens-basketball/schedule"
+      }
+    },
+    {
+      "school": "cincinnati",
+      "host": "gobearcats.com",
+      "paths": {
+        "MBB": "/sports/mens-basketball/schedule",
+        "WBB": "/sports/womens-basketball/schedule"
+      }
+    },
+    {
+      "school": "clemson",
+      "host": "clemsontigers.com",
+      "paths": {
+        "MBB": "/sports/mens-basketball/schedule",
+        "WBB": "/sports/womens-basketball/schedule"
+      }
+    },
+    {
+      "school": "georgia_institute_of_technology",
+      "host": "ramblinwreck.com",
+      "paths": {
+        "MBB": "/sports/m-baskbl/schedule",
+        "WBB": "/sports/w-baskbl/schedule"
+      }
+    },
+    {
+      "school": "missouri",
+      "host": "mutigers.com",
+      "paths": {
+        "MBB": "/sports/mens-basketball/schedule",
+        "WBB": "/sports/womens-basketball/schedule"
+      }
+    },
+    {
+      "school": "nebraska",
+      "host": "huskers.com",
+      "paths": {
+        "MBB": "/sports/mens-basketball/schedule",
+        "WBB": "/sports/womens-basketball/schedule"
+      }
+    },
+    {
+      "school": "new_mexico",
+      "host": "golobos.com",
+      "paths": {
+        "MBB": "/sports/mbball/schedule",
+        "WBB": "/sports/wbball/schedule"
+      }
+    },
+    {
+      "school": "northwestern",
+      "host": "nusports.com",
+      "paths": {
+        "MBB": "/sports/mens-basketball/schedule",
+        "WBB": "/sports/womens-basketball/schedule"
+      }
+    },
+    {
+      "school": "notre_dame",
+      "host": "fightingirish.com",
+      "paths": {
+        "MBB": "/sports/mbball/schedule",
+        "WBB": "/sports/wbball/schedule"
+      }
+    },
+    {
+      "school": "old_dominion",
+      "host": "odusports.com",
+      "paths": {
+        "MBB": "/sports/mens-basketball/schedule",
+        "WBB": "/sports/womens-basketball/schedule"
+      }
+    },
+    {
+      "school": "penn_state",
+      "host": "gopsusports.com",
+      "paths": {
+        "MBB": "/sports/mens-basketball/schedule",
+        "WBB": "/sports/womens-basketball/schedule"
+      }
+    },
+    {
+      "school": "purdue",
+      "host": "purduesports.com",
+      "paths": {
+        "MBB": "/sports/mens-basketball/schedule",
+        "WBB": "/sports/womens-basketball/schedule"
+      }
+    },
+    {
+      "school": "san_diego_state",
+      "host": "goaztecs.com",
+      "paths": {
+        "MBB": "/sports/mens-basketball/schedule",
+        "WBB": "/sports/womens-basketball/schedule"
+      }
+    },
+    {
+      "school": "seattle",
+      "host": "goseattleu.com",
+      "paths": {
+        "MBB": "/sports/mens-basketball/schedule",
+        "WBB": "/sports/womens-basketball/schedule"
+      }
+    },
+    {
+      "school": "stanford",
+      "host": "gostanford.com",
+      "paths": {
+        "MBB": "/sports/mens-basketball/schedule",
+        "WBB": "/sports/womens-basketball/schedule"
+      }
+    },
+    {
+      "school": "texas_am",
+      "host": "12thman.com",
+      "paths": {
+        "MBB": "/sports/mens-basketball/schedule",
+        "WBB": "/sports/womens-basketball/schedule"
+      }
+    },
+    {
+      "school": "texas_san_antonio",
+      "host": "goutsa.com",
+      "paths": {
+        "MBB": "/sports/mens-basketball/schedule",
+        "WBB": "/sports/womens-basketball/schedule"
+      }
+    },
+    {
+      "school": "ucf",
+      "host": "ucfknights.com",
+      "paths": {
+        "MBB": "/sports/mens-basketball/schedule",
+        "WBB": "/sports/womens-basketball/schedule"
+      }
+    },
+    {
+      "school": "ucla",
+      "host": "uclabruins.com",
+      "paths": {
+        "MBB": "/sports/mens-basketball/schedule",
+        "WBB": "/sports/womens-basketball/schedule"
+      }
+    },
+    {
+      "school": "virginia",
+      "host": "virginiasports.com",
+      "paths": {
+        "MBB": "/sports/mbball/schedule",
+        "WBB": "/sports/wbball/schedule"
+      }
+    },
+    {
+      "school": "virginia_tech",
+      "host": "hokiesports.com",
+      "paths": {
+        "MBB": "/sports/mens-basketball/schedule",
+        "WBB": "/sports/womens-basketball/schedule"
+      }
+    },
+    {
+      "school": "washington_state",
+      "host": "wsucougars.com",
+      "paths": {
+        "MBB": "/sports/mens-basketball/schedule",
+        "WBB": "/sports/womens-basketball/schedule"
+      }
+    }
+  ]
+}
