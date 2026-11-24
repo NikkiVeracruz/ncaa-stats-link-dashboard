@@ -1,0 +1,160 @@
+[
+  {
+    "sport": "FBS",
+    "date": "2026-11-21",
+    "school": "sam_houston_state",
+    "teams": [
+      [
+        "Middle Tennessee",
+        31
+      ],
+      [
+        "Sam Houston",
+        28
+      ]
+    ],
+    "source": "https://gobearkats.com/sports/football/schedule",
+    "links": [
+      {
+        "label": "Box Score",
+        "href": "/sports/football/stats/2026/middle-tennessee/boxscore/15549"
+      }
+    ],
+    "destination": {
+      "url": "https://gobearkats.com/sports/football/stats/2026/middle-tennessee/boxscore/15549",
+      "sport": "FBS",
+      "date": "2026-11-21",
+      "teams": [
+        [
+          "Middle Tennessee",
+          31
+        ],
+        [
+          "Sam Houston",
+          28
+        ]
+      ],
+      "final": true,
+      "report": "box_score"
+    }
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "school": "montana_state_university_bozeman",
+    "teams": [
+      [
+        "Montana",
+        null
+      ],
+      [
+        "Montana State",
+        null
+      ]
+    ],
+    "source": "https://msubobcats.com/sports/football/schedule",
+    "links": [],
+    "destination": null
+  },
+  {
+    "sport": "FCS",
+    "date": "2026-11-21",
+    "school": "montana",
+    "teams": [
+      [
+        "Montana",
+        16
+      ],
+      [
+        "Montana State",
+        42
+      ]
+    ],
+    "source": "https://gogriz.com/news/2026/11/21/football-second-half-surge-leads-cats-over-griz",
+    "links": [
+      {
+        "label": "Box Score",
+        "href": "/sports/football/stats/2026/montana-state/boxscore/5262"
+      }
+    ],
+    "destination": {
+      "url": "https://gogriz.com/sports/football/stats/2026/montana-state/boxscore/5262",
+      "sport": "FCS",
+      "date": "2026-11-21",
+      "teams": [
+        [
+          "Montana",
+          16
+        ],
+        [
+          "Montana State",
+          42
+        ]
+      ],
+      "final": true,
+      "report": "box_score"
+    }
+  },
+  {
+    "sport": "MBB",
+    "date": "2026-11-21",
+    "school": "texas_san_antonio",
+    "teams": [
+      [
+        "Air Force",
+        68
+      ],
+      [
+        "UTSA",
+        90
+      ]
+    ],
+    "source": "https://goutsa.com/sports/mens-basketball/schedule",
+    "links": [
+      {
+        "label": "Box Score",
+        "href": "/boxscore/8943"
+      }
+    ],
+    "destination": null
+  },
+  {
+    "sport": "WBB",
+    "date": "2026-11-21",
+    "school": "columbia_university_barnard",
+    "teams": [
+      [
+        "Duke",
+        71
+      ],
+      [
+        "Columbia",
+        47
+      ]
+    ],
+    "source": "https://gocolumbialions.com/sports/womens-basketball/schedule",
+    "links": [
+      {
+        "label": "Box Score",
+        "href": "/sports/womens-basketball/stats/2026-27/duke/boxscore/15598"
+      }
+    ],
+    "destination": {
+      "url": "https://gocolumbialions.com/sports/womens-basketball/stats/2026-27/duke/boxscore/15598",
+      "sport": "WBB",
+      "date": "2026-11-21",
+      "teams": [
+        [
+          "Duke",
+          71
+        ],
+        [
+          "Columbia",
+          47
+        ]
+      ],
+      "final": true,
+      "report": "box_score"
+    }
+  }
+]
