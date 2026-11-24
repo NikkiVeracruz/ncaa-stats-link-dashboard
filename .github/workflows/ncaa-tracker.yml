@@ -47,6 +47,19 @@ jobs:
           python tracker.py --output publish/feed.json
           cp site/index.html site/app.js site/style.css publish/
           touch publish/.nojekyll
+      - name: Determine optional university PDF eligibility
+        id: university_due
+        run: python university_discovery.py --feed publish/feed.json --check-due >> "$GITHUB_OUTPUT"
+      - name: Prepare PDF identity verification only for eligible pilot games
+        if: steps.university_due.outputs.due == 'true'
+        run: |
+          if ! command -v pdftotext >/dev/null; then
+            if ! (timeout 60s sudo apt-get update -qq && timeout 60s sudo apt-get install -y --no-install-recommends poppler-utils); then
+              echo "::warning::Optional PDF verification tool unavailable; preserve normal game tracking"
+            fi
+          fi
+      - name: Enrich verified optional university reports
+        run: python university_discovery.py --feed publish/feed.json
       - name: Persist forward-only feed before publication
         run: |
           set -eu

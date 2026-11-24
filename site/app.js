@@ -19,10 +19,11 @@ function guide(sport){
  ["Athletics website","Opens the school athletics homepage. Select "+(football?"Football":"the correct "+(sport==="MBB"?"men’s":"women’s")+" basketball sport")+", then Schedule. Find the matchup. Try the other school's website if needed."],
  ["Official Game Center","Opens the individual matchup page, which may be available before kickoff or tipoff. After the game, look for Game Info, Stats, Box Score, PDF Box Score, Gamebook or Downloads."],
  ["Official online box score","Opens the individual game's web statistics. Look for a PDF, Download, Printable Box Score or Gamebook option; some schools only publish an online box score."],
- ["Official PDF box score / gamebook","Opens a reviewed PDF link for this matchup. Confirm the teams, date and final score; use the relevant report sections."],
+ ["Official PDF box score / gamebook","Opens a reviewed or automatically verified PDF link for this matchup. Confirm the teams, date and final score; use the relevant report sections."],
  ["NCAA scoreboard","Opens the official NCAA "+labels[sport]+" scoreboard. Choose the game date, find the matchup, then click Box Score. A gamebook PDF may not be offered there; try the school sites or usual resources."]];
  const dl=node("dl");for(const [title,body] of entries)dl.append(node("dt",title),node("dd",body));e.append(dl);
  e.append(node("p",football?"For player participation, check the complete Participation / Player Participation report, including starters and substitutes. No individual statistic does not mean no participation.":"For player participation, review minutes, DNP and substitutions. Zero minutes or a missing line alone does not prove nonparticipation."));
+ if(sport==="WBB")e.append(node("p","Automatic PDF discovery is currently a limited Vanderbilt women's basketball pilot. Other games retain school navigation and reviewed report links."));
  e.append(node("p","Optional link discovery targets: every 5 min in the first hour after completion is detected, every 15 min for the next three hours, then hourly through 24 hours. Only available, permitted sources are checked; not all links can be discovered automatically. Use the normal verification process when a link is missing."));
  e.append(node("p",football?"Current view: Thursday through Wednesday, rolling Thursday at 3 AM Eastern.":"Current view: yesterday, today and tomorrow, rolling daily at 3 AM Eastern."));
  addLink(e,"Open official "+labels[sport]+" scoreboard",official[sport]);return e
