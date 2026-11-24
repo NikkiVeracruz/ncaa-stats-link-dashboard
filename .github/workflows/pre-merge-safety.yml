@@ -52,7 +52,7 @@ jobs:
       - name: One bounded official schedule acquisition trial
         if: github.head_ref == 'research/bounded-vanderbilt-report-discovery' || github.head_ref == 'feat/verified-wmt-school-pdf-expansion'
         run: python university_discovery.py --live-control
-      - name: Verify three additional school PDFs in read-only feed
+      - name: Verify two additional school PDFs in read-only feed
         if: github.head_ref == 'feat/verified-wmt-school-pdf-expansion'
         run: python university_expansion_control.py
       - name: Save standalone preview
