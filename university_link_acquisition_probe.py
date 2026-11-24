@@ -167,10 +167,10 @@ def pdf_identity(text, *, opponent, day, own_score, opponent_score, season):
     required = ("official basketball box score - final", season.lower() + " women's basketball")
     if not all(x in text for x in required):
         return False
-    if not re.search(r"\\b" + re.escape(day) + r"\\b", text):
+    if not re.search(r"\b" + re.escape(day) + r"\b", text):
         return False
     def score(name, value):
-        return bool(re.search(r"\\b" + re.escape(name.lower()) + r"\\s*-\\s*" + str(value) + r"\\s+record\\s*:", text))
+        return bool(re.search(r"\b" + re.escape(name.lower()) + r"\s*-\s*" + str(value) + r"\s+record\s*:", text))
     return score("Vanderbilt", own_score) and score(opponent, opponent_score)
 
 
