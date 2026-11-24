@@ -36,7 +36,7 @@ jobs:
         run: python published_link_probe.py
       - name: Compile tracker and check browser script
         run: |
-          python -m py_compile tracker.py link_enrichment.py
+          python -m py_compile tracker.py link_enrichment.py university_discovery.py university_link_acquisition_probe.py
           node --check site/app.js
       - name: Build disposable current NCAA tracker preview
         run: |
@@ -51,7 +51,7 @@ jobs:
           command -v pdftotext
       - name: One bounded official schedule acquisition trial
         if: github.head_ref == 'research/bounded-vanderbilt-report-discovery'
-        run: python university_link_acquisition_probe.py
+        run: python university_discovery.py --live-control
       - name: Save standalone preview
         uses: actions/upload-artifact@v4
         with:
