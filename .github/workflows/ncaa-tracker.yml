@@ -1,9 +1,11 @@
 name: NCAA tracker update and publish
 on:
   workflow_dispatch:
-  schedule:
-    # Preserve five-minute intervals but avoid the top-of-hour scheduling peak.
-    - cron: '2-57/5 * * * *'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/ncaa-tracker.yml'
+      - 'paused/index.html'
 permissions:
   contents: read
 concurrency:
@@ -11,8 +13,8 @@ concurrency:
   cancel-in-progress: false
 jobs:
   update:
-    # First activation requires Pages configured and NCAA_TRACKER_ENABLED=true.
-    if: github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || vars.NCAA_TRACKER_ENABLED == 'true')
+    # Explicit user pause 2026-11-25: preserve the implementation, but never execute it.
+    if: ${{ false }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -76,8 +78,23 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: publish
+  paused_site:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/configure-pages@v5
+      - name: Upload static pause notice only
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: paused
   deploy:
-    needs: update
+    needs: paused_site
     runs-on: ubuntu-latest
     permissions:
       pages: write
