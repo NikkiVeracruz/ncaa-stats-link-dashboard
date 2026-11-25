@@ -143,7 +143,21 @@ def make_feed(games,prior,cutoff,today,now,observations=None):
     active={k:g for k,g in previous.items() if not g["completed"] and g["status"] not in TERMINAL}
     for key,g in games.items():
         old=previous.get(key)
-        if old and team_conflict(old["team_ids"],g["team_ids"]):raise ValueError("Game identity conflict "+key)
+        if old and team_conflict(old["team_ids"],g["team_ids"]):
+            # A neutral-site scheduled game may reverse designated home/away.
+            # Accept only the same two known participants, same date, and no
+            # previously attached report or live/final result to reinterpret.
+            a,b=old["team_ids"],g["team_ids"]
+            reversed_pair=(all(a.get(s) and b.get(s) for s in ("home","away"))
+                and a["home"]!=a["away"] and a["home"]==b["away"] and a["away"]==b["home"])
+            if not (reversed_pair and old.get("state")=="pre" and not old["completed"]
+                    and old.get("neutral_site") and g.get("neutral_site")
+                    and old["date_et"]==g["date_et"] and not old.get("reports")
+                    and key not in archive):
+                raise ValueError("Game identity conflict "+key)
+            print("Neutral-site scheduled designation reversal",key,a,b,flush=True)
+            # Incoming side-specific names, scores, schools and reports remain
+            # together; do not transfer any old side-specific discovery state.
         if key in archive:
             if old["date_et"]!=g["date_et"]:raise ValueError("Archived game date conflict "+key)
             if not g["completed"]:g=dict(old)

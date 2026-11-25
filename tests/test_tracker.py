@@ -102,3 +102,29 @@ class TrackerTests(unittest.TestCase):
     def test_invalid_final_identity(self):
         e=event();e["competitions"][0]["competitors"][1]["team"]={"displayName":"TBD"}
         with self.assertRaisesRegex(ValueError,"Missing team identity"):self.game(e)
+
+    def test_neutral_scheduled_side_reversal(self):
+        old=self.game(event("pre","STATUS_SCHEDULED",False),group="MBB")
+        old["neutral_site"]=True
+        new=self.game(group="MBB")
+        new["neutral_site"]=True
+        for field in ("team_ids","team_names","school_keys","schools"):
+            new[field]={"home":new[field]["away"],"away":new[field]["home"]}
+        for a,b in (("home_team","away_team"),("home_score","away_score")):
+            new[a],new[b]=new[b],new[a]
+        prior={"archive_start":D.isoformat(),"current":[old],"archive":[]}
+        out=make_feed({new["key"]:new},prior,D,D,datetime.now(timezone.utc))
+        self.assertEqual(out["archive"][0]["team_ids"],new["team_ids"])
+        self.assertEqual(out["archive"][0]["home_score"],28)
+        self.assertEqual(out["archive"][0]["away_score"],31)
+        for change in ({"neutral_site":False},{"state":"in"},{"reports":[{"url":"https://example.org/old"}]}):
+            prior["current"]=[dict(old,**change)]
+            with self.assertRaisesRegex(ValueError,"Game identity conflict"):
+                make_feed({new["key"]:new},prior,D,D,datetime.now(timezone.utc))
+        prior["current"]=[old]
+        other=dict(new,team_ids={"home":"2","away":"999"})
+        with self.assertRaisesRegex(ValueError,"Game identity conflict"):
+            make_feed({other["key"]:other},prior,D,D,datetime.now(timezone.utc))
+        prior["archive"]=[dict(old,completed=True,state="post")]
+        with self.assertRaisesRegex(ValueError,"Game identity conflict"):
+            make_feed({new["key"]:new},prior,D,D,datetime.now(timezone.utc))

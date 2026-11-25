@@ -66,6 +66,23 @@ jobs:
       - name: Verify seven newly enabled school-sport combinations through production path
         if: github.head_ref == 'feat/activate-verified-wmt-batch'
         run: python wmt_batch_activation_control.py
+      - name: Read-only incident replay using frozen durable prior feed
+        if: github.head_ref == 'fix/ncaa-neutral-identity-and-pause'
+        run: |
+          git fetch origin refs/heads/ncaa-data
+          git show FETCH_HEAD:feed.json > "$RUNNER_TEMP/incident-feed.json"
+          python tracker.py --output "$RUNNER_TEMP/incident-feed.json"
+          python -c 'import json,sys; d=json.load(open(sys.argv[1])); assert d["archive_start"]=="2026-11-23"; print("Incident replay archive/current",len(d["archive"]),len(d["current"]))' "$RUNNER_TEMP/incident-feed.json"
+      - name: Validate static pause configuration
+        if: github.head_ref == 'fix/ncaa-neutral-identity-and-pause'
+        run: |
+          test -f paused/index.html
+          test "$(find paused -type f | wc -l)" -eq 1
+          grep -F 'if: ${{ false }}' .github/workflows/ncaa-tracker.yml
+          grep -F 'if: ${{ false }}' .github/workflows/probe.yml
+          ! grep -E '^  schedule:' .github/workflows/ncaa-tracker.yml
+          grep -F 'needs: paused_site' .github/workflows/ncaa-tracker.yml
+          ! grep -Ei '<script|http-equiv=.*refresh|feed\.json' paused/index.html
       - name: Save standalone preview
         uses: actions/upload-artifact@v4
         with:
