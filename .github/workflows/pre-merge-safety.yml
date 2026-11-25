@@ -66,6 +66,16 @@ jobs:
       - name: Verify seven newly enabled school-sport combinations through production path
         if: github.head_ref == 'feat/activate-verified-wmt-batch'
         run: python wmt_batch_activation_control.py
+      - name: Verify user-requested static pause
+        if: github.head_ref == 'ops/pause-ncaa-2026-11-25'
+        run: |
+          test -f paused/index.html
+          test "$(find paused -type f | wc -l)" -eq 1
+          grep -E 'if: .*false' .github/workflows/ncaa-tracker.yml
+          grep -E 'if: .*false' .github/workflows/probe.yml
+          if grep -E '^  schedule:' .github/workflows/ncaa-tracker.yml; then exit 1; fi
+          grep -F 'needs: paused_site' .github/workflows/ncaa-tracker.yml
+          if grep -Ei '<script|http-equiv=.*refresh|feed\.json' paused/index.html; then exit 1; fi
       - name: Save standalone preview
         uses: actions/upload-artifact@v4
         with:
