@@ -78,11 +78,11 @@ jobs:
         run: |
           test -f paused/index.html
           test "$(find paused -type f | wc -l)" -eq 1
-          grep -F 'if: ${{ false }}' .github/workflows/ncaa-tracker.yml
-          grep -F 'if: ${{ false }}' .github/workflows/probe.yml
-          ! grep -E '^  schedule:' .github/workflows/ncaa-tracker.yml
+          grep -E 'if: .*false' .github/workflows/ncaa-tracker.yml
+          grep -E 'if: .*false' .github/workflows/probe.yml
+          if grep -E '^  schedule:' .github/workflows/ncaa-tracker.yml; then exit 1; fi
           grep -F 'needs: paused_site' .github/workflows/ncaa-tracker.yml
-          ! grep -Ei '<script|http-equiv=.*refresh|feed\.json' paused/index.html
+          if grep -Ei '<script|http-equiv=.*refresh|feed\.json' paused/index.html; then exit 1; fi
       - name: Save standalone preview
         uses: actions/upload-artifact@v4
         with:
